@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  Run_ID: 1
+  Var_Name: MyString
+  Var_Metric: MyString
+  Var_Value: 1.5
+  Submitter: MyString
+
+two:
+  Run_ID: 1
+  Var_Name: MyString
+  Var_Metric: MyString
+  Var_Value: 1.5
+  Submitter: MyString

@@ -6,7 +6,13 @@ class DatapointController < ApplicationController
   def update_data
   end
   
-  def send_update_data
+  def confirm_data_update
+  end
+  
+  def add_data
+  end
+  
+  def confirm_data_add
   end
   
 end

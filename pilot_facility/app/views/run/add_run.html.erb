@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<div class = "center"><h1>Request a Pilot-Scale Run</h1></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <body>
+      <%= form_for @run, url: {action: "add_run"} do |f| %>
+        
+        <p><%= f.label :Scientist, "Requesting Scientist" %>
+        <%= f.text_field :Scientist, class: 'form-control' %></p>
+        
+        <p><%= f.label :Reactor_Type, "Reactor Type" %>
+        <%= f.select :Reactor_Type, [['10L Nalgene'],['20L Nalgene'],['10L Flat Panel'],['50L Round']]%></p>
+        
+        <p><%= f.label :Media, "Media" %>
+        <%= f.select :Media, [['1X SOT'],['1X BG11'],['3X BG11']]%></p>
+        
+        <p><%= f.label :pH, "pH" %>
+        <%= f.number_field :pH, class: 'form-control',  :step => 0.1 %></p>
+        
+        <p><%= f.label :Light_Intensity, "Light Intensity (mmoles/m2/sec)" %>
+        <%= f.number_field :Light_Intensity, class: 'form-control',  :step => 0.1 %></p>
+        
+        <p><%= f.label :Light_Path, "Light Path (cm)" %>
+        <%= f.number_field :Light_Path, class: 'form-control', :step => 0.1 %></p>
+        
+        <p><%= f.label :Temperature, "Temperature (C)" %>
+        <%= f.number_field :Temperature, class: 'form-control' %></p>
+        
+        <p><%= f.label :Organism, "Select target organism" %>
+        <%= f.select :Organism, [['Aponinum'],['Synechococcus 7942'],['E.coli']]%></p>
+        
+        <p><%= f.label :Strain_ID, "Strain ID" %>
+        <%= f.number_field :Strain_ID, class: 'form-control' %></p>
+
+        <%= f.submit "Submit Run for Approval", class: "btn btn-primary" %>
+      <% end %>
+    </body>
+  </div>
+</div>
