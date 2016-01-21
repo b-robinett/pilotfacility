@@ -1,7 +1,11 @@
 class RunController < ApplicationController
   
   def dashboard
-    @current = Run.where("created_at < ?", Date.today)
+    @current = Run.where("Actual_start_date < ? and Actual_end_date > ?", Date.today, Date.today)
+  end
+  
+  def approval
+    @awaiting = Run.where("Actual_start_date IS NULL")
   end
   
   def add_run
@@ -31,17 +35,24 @@ class RunController < ApplicationController
   end
   
   def update_run
-    @input_id = params[:run_id_val]
-    @target = Run.find(@input_id)
-    Run.save_val(@target)
+    @target = Run.find(params[:run_id_val])
   end
   
   def confirm_run_update
-    @var_to_change = params[:variable]
-    @val_to_change = params[:value]
-    @new_target = Run.find(@saved_val)
-    #new_target.@var_to_change = @val_to_change
-    #@target.save!
+    @new_target = Run.find(params[:run][:id])
+    @new_target.update(:Scientist => params[:run][:Scientist],
+                      :Reactor_Type => params[:run][:Reactor_Type],
+                      :Media => params[:run][:Media],
+                      :pH => params[:run][:pH],
+                      :Light_Intensity => params[:run][:Light_Intensity],
+                      :Light_Path => params[:run][:Light_Path],
+                      :Temperature => params[:run][:Temperature],
+                      :Organism => params[:run][:Organism],
+                      :Strain_ID => params[:run][:Strain_ID],
+                      :Actual_start_date => params[:run][:Actual_start_date],
+                      :Actual_end_date => params[:run][:Actual_end_date],
+                      :Reactor_ID => params[:run][:Reactor_ID]
+                      )
   end
   
   def search
@@ -58,6 +69,10 @@ class RunController < ApplicationController
       @Variable = "Reactor_ID"
     elsif @Input_Var == "Strain ID"
       @Variable = "Strain_ID"
+    elsif @Input_Var == "Scientist"
+      @Variable = "Scientist"
+    elsif @Input_Var == "Organism"
+      @Variable = "Organism"
     end
     
     @Value = params[:value].to_s

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
+<div class = "center" align="center"><h1>Runs Awaiting Admin Approval</h1></div>
+
+<p></p>
+<%= form_tag '/update_run' do %>
+  <%= "Update Run" %>
+  <%= number_field_tag 'run_id_val' %>
+  <%= submit_tag 'GO' %> 
+<% end %>
+<p></p>
+
+<div align="center">
+  <table>                         
+    <tr>                          
+      <th>Run ID</th>
+      <th>Scientist</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Organism</th>
+      <th>Strain ID</th>
+      <th>Media</th>
+      <th>pH</th>
+      <th>Temperature</th>
+      <th>Light Intensity</th>
+      <th>Reactor ID</th>
+      <th>Reactor Type</th>
+    </tr>
+  <% @awaiting.each do |p| %>       
+    <tr>
+      <td><%= p[:id] %></td>  
+      <td><%= p[:Scientist] %></td> 
+      <td><%= p[:Actual_start_date] %></td>  
+      <td><%= p[:Actual_end_date] %></td>
+      <td><%= p[:Organism] %></td>  
+      <td><%= p[:Strain_ID] %></td>
+      <td><%= p[:Media] %></td>  
+      <td><%= p[:pH] %></td>
+      <td><%= p[:Temperature] %></td>  
+      <td><%= p[:Light_Intensity] %></td>
+      <td><%= p[:Reactor_ID] %></td>  
+      <td><%= p[:Reactor_Type] %></td>
+    </tr>
+  <% end %>                        
+  </table>  
+</div>

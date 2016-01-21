@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
 <div class = "center"><h1>Request a Pilot-Scale Run</h1></div>
 
 <div class="row">
@@ -10,7 +17,7 @@
         <%= f.text_field :Scientist, class: 'form-control' %></p>
         
         <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, [['10L Nalgene'],['20L Nalgene'],['10L Flat Panel'],['50L Round']]%></p>
+        <%= f.select :Reactor_Type, [['10L Nalgene'],['20L Nalgene'],['10L Flat Panel'],['50L Round'],['Raceway']]%></p>
         
         <p><%= f.label :Media, "Media" %>
         <%= f.select :Media, [['1X SOT'],['1X BG11'],['3X BG11']]%></p>

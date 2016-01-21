@@ -1,3 +1,38 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
 <div class = "center"><h1>Search Results</h1></div>
-<div class = "center"><p>details to follow</p></div>
+<p></p>
+<%= form_tag '/update_data' do %>
+  <%= "Update by Datapoint ID" %>
+  <%= number_field_tag 'dp_id_val' %>
+  <%= submit_tag 'GO' %> 
+<% end %>
+<p></p>
+<table>                         
+  <tr>                          
+    <th>Datapoint ID</th>
+    <th>Run ID</th>
+    <th>Entry Date</th>
+    <th>Submitter</th>
+    <th>Variable Name</th>
+    <th>Variable Metric</th>
+    <th>Variable Value</th>
+  </tr>
+<% @run_data.each do |p| %>       
+  <tr>
+    <td><%= p[:id] %></td>  
+    <td><%= p[:Run_ID] %></td> 
+    <td><%= p[:created_at] %></td>
+    <td><%= p[:Submitter] %></td>  
+    <td><%= p[:Var_Name] %></td>
+    <td><%= p[:Var_Metric] %></td>  
+    <td><%= p[:Var_Value] %></td>
+  </tr>
+<% end %>                        
+</table>   

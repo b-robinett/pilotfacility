@@ -11,42 +11,42 @@
       <td> 
         <form>
           <button type="submit" formaction="search">Search</button>
-          <button type="submit" formaction="add_run">Add New</button>
+          <button type="submit" formaction="add_run">Request</button>
         </form>
       </td>
       <td>
-        <form>
-          <button type="submit" formaction="search">Search</button>
-          <button type="submit" formaction="add_data">Add New</button>
+        <form> 
+          <button type="submit" formaction="add_data">Add Data</button>
         </form>
       </td>
     </tr>
     <tr>
       <td>
         <%= form_tag '/update_run' do %>
-        <%= "Update" %>
-        <%= number_field_tag 'run_id_val' %>
-        <%= submit_tag 'GO' %> 
-      <% end %>
+          <%= "Update" %>
+          <%= number_field_tag 'run_id_val' %>
+          <%= submit_tag 'GO' %> 
+        <% end %>
       </td>
       <td>
-        <%= form_tag '/update_data' do %>
-        <%= "Update" %>
-        <%= number_field_tag 'dp_id_val' %>
-        <%= submit_tag 'GO' %> 
-      <% end %>
+        <%= form_tag '/data_results' do %>
+          <%= "See Data by Run" %>
+          <%= number_field_tag 'run_id_val' %>
+          <%= submit_tag 'GO' %> 
+        <% end %>
       </td>
     </tr>
   </table>
 </div>
 <p></p>
 <div align="center">
+  <h1>RUNS IN PROGRESS</h1>
   <table>                         
     <tr>                          
       <th>Run ID</th>
       <th>Scientist</th>
-      <th>Actual Start Date</th>
-      <th>Actual End Date</th>
+      <th>Start Date</th>
+      <th>End Date</th>
       <th>Organism</th>
       <th>Strain ID</th>
       <th>Media</th>

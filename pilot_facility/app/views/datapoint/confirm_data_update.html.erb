@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
+<div class = "center"><h1>Following Datapoint Updated in Database</h1></div>
+
+<p><b>Datapoint ID: </b><%= @dp_new_target[:id] %></p>
+<p><b>Run ID: </b><%= @dp_new_target[:Run_ID] %></p>
+<p><b>Created At: </b><%= @dp_new_target[:created_at] %></p>
+<p><b>Submitter: </b><%= @dp_new_target[:Submitter] %></p>
+<p><b>Variable Name: </b><%= @dp_new_target[:Var_Name] %></p>
+<p><b>Variable Metric: </b><%= @dp_new_target[:Var_Metric] %></p>
+<p><b>Variable Value: </b><%= @dp_new_target[:Var_Value] %></p>

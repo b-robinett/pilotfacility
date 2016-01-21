@@ -1,3 +1,35 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
 <div class = "center"><h1>Add a Datapoint</h1></div>
-<div class = "center"><p>details to follow</p></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <body>
+      <%= form_for @datapoint, url: {action: "add_data"} do |f| %>
+        
+        <p><%= f.label :Run_ID, "Run ID" %>
+        <%= f.number_field :Run_ID, class: 'form-control' %></p>
+        
+        <p><%= f.label :Submitter, "Submitter" %>
+        <%= f.text_field :Submitter, class: 'form-control' %></p>
+        
+        <p><%= f.label :Var_Name, "Variable Name" %>
+        <%= f.select :Var_Name, [['pH'],['Optical Density'],['Temperature'],['Dry Weight']]%></p>
+        
+        <p><%= f.label :Var_Metric, "Variable Metric" %>
+        <%= f.select :Var_Metric, [['pH'],['A750'],['A600'],['Celsius'],['Gram']]%></p>
+        
+        <p><%= f.label :Var_Value, "Variable Value" %>
+        <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001 %></p>
+
+        <%= f.submit "Submit Datapoint", class: "btn btn-primary" %>
+      <% end %>
+    </body>
+  </div>
+</div>

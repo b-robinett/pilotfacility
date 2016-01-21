@@ -1,3 +1,38 @@
 <!DOCTYPE html>
-<div class = "center"><h1>Update a Datapoint</h1></div>
-<div class = "center"><p>details to follow</p></div>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
+<div class = "center"><h1>Update a Run</h1></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <body>
+      <%= form_for @dp_target, url: {action: "update_data"} do |f| %>
+        
+        <%= f.hidden_field :id, :value => @dp_target[:id] %></p>
+        
+        <p><%= f.label :Run_ID, "Run ID" %>
+        <%= f.number_field :Run_ID, class: 'form-control', :value => @dp_target[:Run_ID] %></p>
+        
+        <p><%= f.label :Submitter, "Submitter" %>
+        <%= f.text_field :Submitter, class: 'form-control', :value => @dp_target[:Submitter] %></p>
+        
+        <p><%= f.label :Var_Name, "Variable Name" %>
+        <%= f.select :Var_Name, options_for_select(['pH','Optical Density','Temperature','Dry Weight'], @dp_target[:Var_Name]) %></p>
+        
+        <p><%= f.label :Var_Metric, "Variable Metric" %>
+        <%= f.select :Var_Metric, options_for_select(['pH','A750','A600','Celsius','Grams'], @dp_target[:Var_Metric]) %></p>
+        
+        <p><%= f.label :Var_Value, "Variable Value" %>
+        <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001, :value => @dp_target[:Var_Value] %></p>
+
+        <%= f.submit "Update Datapoint", class: "btn btn-primary" %>
+      <% end %>
+    </body>
+  </div>
+</div>
+
