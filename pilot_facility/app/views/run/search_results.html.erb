@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<div class = "center"><h1>Pilot Facility Search Results</h1></div>
+
+<p><b>Your query variable was: </b><%= @Variable %></p>
+<p><b>Your query variable was: </b><%= @Value %></p>
+<p><%= "Your results are: " %></p>
+<table>                         
+  <tr>                          
+    <th>Run ID</th>
+    <th>Scientist</th>
+    <th>Actual Start Date</th>
+    <th>Actual End Date</th>
+    <th>Organism</th>
+    <th>Strain ID</th>
+    <th>Media</th>
+    <th>pH</th>
+    <th>Temperature</th>
+    <th>Light Intensity</th>
+    <th>Reactor ID</th>
+    <th>Reactor Type</th>
+  </tr>
+<% @results.each do |p| %>       
+  <tr>
+    <td><%= p[:id] %></td>  
+    <td><%= p[:Scientist] %></td> 
+    <td><%= p[:Actual_start_date] %></td>  
+    <td><%= p[:Actual_end_date] %></td>
+    <td><%= p[:Organism] %></td>  
+    <td><%= p[:Strain_ID] %></td>
+    <td><%= p[:Media] %></td>  
+    <td><%= p[:pH] %></td>
+    <td><%= p[:Temperature] %></td>  
+    <td><%= p[:Light_Intensity] %></td>
+    <td><%= p[:Reactor_ID] %></td>  
+    <td><%= p[:Reactor_Type] %></td>
+  </tr>
+<% end %>                        
+</table>   

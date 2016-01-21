@@ -1,3 +1,12 @@
 <!DOCTYPE html>
 <div class = "center"><h1>Search the Runs Database</h1></div>
-<div class = "center"><p>details to follow</p></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-5">
+    <%= form_tag '/search' do %>
+      <%= select_tag 'variable', options_for_select([ "Scientist", "Reactor Type", "Reactor ID", "Organism", "Strain ID", "Run ID" ]) %>
+      <%= text_field_tag 'value' %>
+      <%= submit_tag 'Search' %> 
+    <% end %>
+  </div>
+</div>

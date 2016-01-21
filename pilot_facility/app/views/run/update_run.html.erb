@@ -1,3 +1,23 @@
 <!DOCTYPE html>
 <div class = "center"><h1>Update a Run</h1></div>
-<div class = "center"><p>details to follow</p></div>
+
+<p><b>Run ID: </b><%= @target[:id] %></p>
+<p><b>Created At: </b><%= @target[:created_at] %></p>
+<p><b>Scientist: </b><%= @target[:Scientist] %></p>
+<p><b>Media: </b><%= @target[:Media] %></p>
+<p><b>pH: </b><%= @target[:pH] %></p>
+<p><b>Light Intensity: </b><%= @target[:Light_Intensity] %></p>
+<p><b>Light Path: </b><%= @target[:Light_Path] %></p>
+<p><b>Temperature: </b><%= @target[:Temperature] %></p>
+<p><b>Organism: </b><%= @target[:Organism] %></p>
+<p><b>Strain Id: </b><%= @target[:Strain_ID] %></p>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-5">
+    <%= form_tag '/confirm_run_update' do %>
+      <%= select_tag 'variable', options_for_select([ "Scientist", "Reactor Type", "Reactor ID", "Organism", "Strain ID", "Run ID" ]) %>
+      <%= text_field_tag 'value' %>
+      <%= submit_tag 'UPDATE' %> 
+    <% end %>
+  </div>
+</div>

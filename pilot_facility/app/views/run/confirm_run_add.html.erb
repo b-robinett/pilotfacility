@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <div class = "center"><h1>Following Run Added to Dbase</h1></div>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <body>
-      <p><b>Requesting Scientist: </b> <%= @run.Scientist %></p>
-      <p><b>Reactor Type: </b><%= @run.Reactor_Type %></p>
-      <p><b>Media: </b><%=  @run.Media %></p>
-      <p><b>pH: </b><%= @run.pH %></p>
-      <p><b>Light Intensity: </b><%=  @run.Light_Intensity %></p>
-      <p><b>Light Path: </b><%=  @run.Light_Path %></p>
-      <p><b>Temperature: </b><%= @run.Temperature %></p>
-      <p><b>Organism: </b><%=  @run.Organism %></p>
-      <p><b>Strain ID: </b><%=  @run.Strain_ID %></p>
-    </body>
-  </div>
-</div>
+<p><b>Run ID: </b><%= @record[:id] %></p>
+<p><b>Created At: </b><%= @record[:created_at] %></p>
+<p><b>Scientist: </b><%= @record[:Scientist] %></p>
+<p><b>Media: </b><%= @record[:Media] %></p>
+<p><b>pH: </b><%= @record[:pH] %></p>
+<p><b>Light Intensity: </b><%= @record[:Light_Intensity] %></p>
+<p><b>Light Path: </b><%= @record[:Light_Path] %></p>
+<p><b>Temperature: </b><%= @record[:Temperature] %></p>
+<p><b>Organism: </b><%= @record[:Organism] %></p>
+<p><b>Strain Id: </b><%= @record[:Strain_ID] %></p>

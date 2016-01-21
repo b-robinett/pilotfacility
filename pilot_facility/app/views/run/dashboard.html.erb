@@ -1,3 +1,76 @@
 <!DOCTYPE html>
-<div class = "center"><h1>Matrix Genetics Pilot Facility Dashboard</h1></div>
-<div class = "center"><p>details to follow</p></div>
+<div class = "center" align="center"><h1>Matrix Genetics Pilot Facility Dashboard</h1></div>
+
+<div align="center"> 
+  <table border="0"> 
+    <tr>
+      <th><h1>RUNS</h1></th>
+      <th><h1>DATAPOINTS</h1></th>
+    </tr>
+    <tr> 
+      <td> 
+        <form>
+          <button type="submit" formaction="search">Search</button>
+          <button type="submit" formaction="add_run">Add New</button>
+        </form>
+      </td>
+      <td>
+        <form>
+          <button type="submit" formaction="search">Search</button>
+          <button type="submit" formaction="add_data">Add New</button>
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= form_tag '/update_run' do %>
+        <%= "Update" %>
+        <%= number_field_tag 'run_id_val' %>
+        <%= submit_tag 'GO' %> 
+      <% end %>
+      </td>
+      <td>
+        <%= form_tag '/update_data' do %>
+        <%= "Update" %>
+        <%= number_field_tag 'dp_id_val' %>
+        <%= submit_tag 'GO' %> 
+      <% end %>
+      </td>
+    </tr>
+  </table>
+</div>
+<p></p>
+<div align="center">
+  <table>                         
+    <tr>                          
+      <th>Run ID</th>
+      <th>Scientist</th>
+      <th>Actual Start Date</th>
+      <th>Actual End Date</th>
+      <th>Organism</th>
+      <th>Strain ID</th>
+      <th>Media</th>
+      <th>pH</th>
+      <th>Temperature</th>
+      <th>Light Intensity</th>
+      <th>Reactor ID</th>
+      <th>Reactor Type</th>
+    </tr>
+  <% @current.each do |p| %>       
+    <tr>
+      <td><%= p[:id] %></td>  
+      <td><%= p[:Scientist] %></td> 
+      <td><%= p[:Actual_start_date] %></td>  
+      <td><%= p[:Actual_end_date] %></td>
+      <td><%= p[:Organism] %></td>  
+      <td><%= p[:Strain_ID] %></td>
+      <td><%= p[:Media] %></td>  
+      <td><%= p[:pH] %></td>
+      <td><%= p[:Temperature] %></td>  
+      <td><%= p[:Light_Intensity] %></td>
+      <td><%= p[:Reactor_ID] %></td>  
+      <td><%= p[:Reactor_Type] %></td>
+    </tr>
+  <% end %>                        
+  </table>  
+</div>

@@ -27,4 +27,11 @@ class Run < ActiveRecord::Base
   def Strain_ID
   end
   
+  def self.save_val(value)
+    @saved_val = value
+  end
+  
+    
+  
+    
 end
