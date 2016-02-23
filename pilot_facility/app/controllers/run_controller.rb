@@ -17,14 +17,18 @@ class RunController < ApplicationController
     
     @run.Reactor_Type = params[:run][:Reactor_Type]
     @run.Scientist = params[:run][:Scientist]
+    @run.Organism = params[:run][:Organism]
+    @run.Strain_ID = params[:run][:Strain_ID]
     @run.Media = params[:run][:Media]
     @run.pH = params[:run][:pH]
+    @run.Start_OD = params[:run][:Start_OD]
     @run.Light_Intensity = params[:run][:Light_Intensity]
     @run.Light_Path = params[:run][:Light_Path]
     @run.Temperature = params[:run][:Temperature]
-    @run.Organism = params[:run][:Organism]
-    @run.Strain_ID = params[:run][:Strain_ID]
-    
+    @run.Air_Flow = params[:run][:Air_Flow]
+    @run.CO2_Flow = params[:run][:CO2_Flow]
+    @run.Day_Harvested = params[:run][:Day_Harvested]
+
     @run.save!
     
     @record = Run.last
@@ -44,6 +48,7 @@ class RunController < ApplicationController
                       :Reactor_Type => params[:run][:Reactor_Type],
                       :Media => params[:run][:Media],
                       :pH => params[:run][:pH],
+                      :Start_OD => params[:run][:Start_OD],
                       :Light_Intensity => params[:run][:Light_Intensity],
                       :Light_Path => params[:run][:Light_Path],
                       :Temperature => params[:run][:Temperature],

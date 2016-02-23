@@ -19,14 +19,23 @@
         <p><%= f.label :Submitter, "Submitter" %>
         <%= f.text_field :Submitter, class: 'form-control' %></p>
         
+        <p><%= f.label :Time_Taken, "Date Data Collected" %>
+        <%= f.date_field :Time_Taken, class: 'form-control' %></p>
+        
+        <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
+        <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500 %></p>
+        
         <p><%= f.label :Var_Name, "Variable Name" %>
-        <%= f.select :Var_Name, [['pH'],['Optical Density'],['Temperature'],['Dry Weight']]%></p>
+        <%= f.select :Var_Name, [['pH'],['Optical Density'],['Temperature'],['Dry Weight'],['Microscopy'],['Plate']]%></p>
         
         <p><%= f.label :Var_Metric, "Variable Metric" %>
-        <%= f.select :Var_Metric, [['pH'],['A750'],['A600'],['Celsius'],['Gram']]%></p>
+        <%= f.select :Var_Metric, [['pH'],['A750'],['Celsius'],['Gram']]%></p>
         
         <p><%= f.label :Var_Value, "Variable Value" %>
         <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001 %></p>
+        
+        <p><%= f.label :Notes, "Notes - e.g. plate media" %>
+        <%= f.text_field :Notes, class: 'form-control', :size => 30 %></p>
 
         <%= f.submit "Submit Datapoint", class: "btn btn-primary" %>
       <% end %>

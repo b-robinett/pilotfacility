@@ -12,9 +12,12 @@ class DatapointController < ApplicationController
      @dp_new_target = Datapoint.find(params[:datapoint][:id])
      @dp_new_target.update(:Submitter => params[:datapoint][:Submitter],
                       :Run_ID => params[:datapoint][:Run_ID],
+                      :Time_Taken => params[:datapoint][:Time_Taken],
+                      :Hrs_Post_Start => params[:datapoint][:Hrs_Post_Start],
                       :Var_Name => params[:datapoint][:Var_Name],
                       :Var_Metric => params[:datapoint][:Var_Metric],
-                      :Var_Value => params[:datapoint][:Var_Value]
+                      :Var_Value => params[:datapoint][:Var_Value],
+                      :Notes => params[:datapoint][:Notes]
                       )
   end
   
@@ -27,9 +30,13 @@ class DatapointController < ApplicationController
     
     @datapoint.Run_ID = params[:datapoint][:Run_ID]
     @datapoint.Submitter = params[:datapoint][:Submitter]
+    @datapoint.Time_Taken = params[:datapoint][:Time_Taken]
+    @datapoint.Hrs_Post_Start = params[:datapoint][:Hrs_Post_Start]
     @datapoint.Var_Name = params[:datapoint][:Var_Name]
     @datapoint.Var_Metric = params[:datapoint][:Var_Metric]
     @datapoint.Var_Value = params[:datapoint][:Var_Value]
+    @datapoint.Notes = params[:datapoint][:Notes]
+    
     @datapoint.save!
     
     @dp_record = Datapoint.last

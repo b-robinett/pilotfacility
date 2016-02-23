@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
 <div class = "center"><h1>Run Updated!</h1></div>
 
 <p><b>Run ID: </b><%= @new_target[:id] %></p>
@@ -7,12 +14,16 @@
 <p><b>Scientist: </b><%= @new_target[:Scientist] %></p>
 <p><b>Start Date: </b><%= @new_target[:Actual_start_date] %></p>
 <p><b>End Date: </b><%= @new_target[:Actual_end_date] %></p>
-<p><b>Media: </b><%= @new_target[:Media] %></p>
-<p><b>pH: </b><%= @new_target[:pH] %></p>
-<p><b>Light Intensity: </b><%= @new_target[:Light_Intensity] %></p>
-<p><b>Light Path: </b><%= @new_target[:Light_Path] %></p>
-<p><b>Temperature: </b><%= @new_target[:Temperature] %></p>
 <p><b>Organism: </b><%= @new_target[:Organism] %></p>
 <p><b>Strain Id: </b><%= @new_target[:Strain_ID] %></p>
 <p><b>Reactor Type: </b><%= @new_target[:Reactor_Type] %></p>
 <p><b>Reactor ID: </b><%= @new_target[:Reactor_ID] %></p>
+<p><b>Media: </b><%= @new_target[:Media] %></p>
+<p><b>Starting OD: </b><%= @new_target[:Start_OD] %></p>
+<p><b>pH: </b><%= @new_target[:pH] %></p>
+<p><b>Light Intensity: </b><%= @new_target[:Light_Intensity] %></p>
+<p><b>Light Path: </b><%= @new_target[:Light_Path] %></p>
+<p><b>Temperature: </b><%= @new_target[:Temperature] %></p>
+<p><b>Air Flow: </b><%= @new_target[:Air_Flow] %></p>
+<p><b>CO2 Flow: </b><%= @new_target[:CO2_Flow] %></p>
+<p><b>Day to Harvest: </b><%= @new_target[:Day_Harvested] %></p>

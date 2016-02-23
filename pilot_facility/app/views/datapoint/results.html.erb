@@ -20,19 +20,25 @@
     <th>Run ID</th>
     <th>Entry Date</th>
     <th>Submitter</th>
+    <th>Date Collected</th>
+    <th>Hours Post Start</th>
     <th>Variable Name</th>
     <th>Variable Metric</th>
     <th>Variable Value</th>
+    <th>Notes</th>
   </tr>
 <% @run_data.each do |p| %>       
   <tr>
     <td><%= p[:id] %></td>  
     <td><%= p[:Run_ID] %></td> 
     <td><%= p[:created_at] %></td>
-    <td><%= p[:Submitter] %></td>  
+    <td><%= p[:Submitter] %></td>
+    <td><%= p[:Time_Taken] %></td>
+    <td><%= p[:Hrs_Post_Start] %></td>
     <td><%= p[:Var_Name] %></td>
     <td><%= p[:Var_Metric] %></td>  
     <td><%= p[:Var_Value] %></td>
+    <td><%= p[:Notes] %></td>
   </tr>
 <% end %>                        
 </table>   

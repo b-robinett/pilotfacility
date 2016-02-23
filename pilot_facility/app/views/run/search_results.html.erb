@@ -1,9 +1,16 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
 <div class = "center"><h1>Pilot Facility Search Results</h1></div>
 
 <p><b>Your query variable was: </b><%= @Variable %></p>
-<p><b>Your query variable was: </b><%= @Value %></p>
-<p><%= "Your results are: " %></p>
+<p><b>Your query value was: </b><%= @Value %></p>
+<p><b>RESULTS: </b></p>
 <table>                         
   <tr>                          
     <th>Run ID</th>

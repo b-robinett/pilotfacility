@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119235426) do
+ActiveRecord::Schema.define(version: 20160203182550) do
 
   create_table "datapoints", force: :cascade do |t|
     t.integer  "Run_ID"
@@ -19,15 +19,17 @@ ActiveRecord::Schema.define(version: 20160119235426) do
     t.string   "Var_Metric"
     t.float    "Var_Value"
     t.string   "Submitter"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.datetime "Time_Taken"
+    t.string   "Notes"
+    t.integer  "Hrs_Post_Start"
   end
 
   create_table "runs", force: :cascade do |t|
     t.string   "Reactor_Type"
     t.integer  "Reactor_ID"
     t.string   "Scientist"
-    t.datetime "Approved_start_date"
     t.datetime "Actual_start_date"
     t.datetime "Actual_end_date"
     t.string   "Media"
@@ -37,8 +39,15 @@ ActiveRecord::Schema.define(version: 20160119235426) do
     t.integer  "Temperature"
     t.string   "Organism"
     t.integer  "Strain_ID"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.float    "CO2_Flow"
+    t.float    "Air_Flow"
+    t.float    "Depth"
+    t.float    "Start_OD"
+    t.integer  "Parent_Run"
+    t.integer  "Day_Harvested"
+    t.string   "Media_ID"
   end
 
 end

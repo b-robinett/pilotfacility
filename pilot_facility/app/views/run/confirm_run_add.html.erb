@@ -1,13 +1,28 @@
 <!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
 <div class = "center"><h1>Following Run Added to Dbase</h1></div>
 
 <p><b>Run ID: </b><%= @record[:id] %></p>
 <p><b>Created At: </b><%= @record[:created_at] %></p>
+<p><b>Updated At: </b><%= @record[:updated_at] %></p>
 <p><b>Scientist: </b><%= @record[:Scientist] %></p>
+<p><b>Start Date: </b><%= @record[:Actual_start_date] %></p>
+<p><b>End Date: </b><%= @record[:Actual_end_date] %></p>
+<p><b>Organism: </b><%= @record[:Organism] %></p>
+<p><b>Strain Id: </b><%= @record[:Strain_ID] %></p>
+<p><b>Reactor Type: </b><%= @record[:Reactor_Type] %></p>
+<p><b>Reactor ID: </b><%= @record[:Reactor_ID] %></p>
 <p><b>Media: </b><%= @record[:Media] %></p>
+<p><b>Starting OD: </b><%= @record[:Start_OD] %></p>
 <p><b>pH: </b><%= @record[:pH] %></p>
 <p><b>Light Intensity: </b><%= @record[:Light_Intensity] %></p>
 <p><b>Light Path: </b><%= @record[:Light_Path] %></p>
 <p><b>Temperature: </b><%= @record[:Temperature] %></p>
-<p><b>Organism: </b><%= @record[:Organism] %></p>
-<p><b>Strain Id: </b><%= @record[:Strain_ID] %></p>
+<p><b>Air Flow: </b><%= @record[:Air_Flow] %></p>
+<p><b>CO2 Flow: </b><%= @record[:CO2_Flow] %></p>
+<p><b>Day to Harvest: </b><%= @record[:Day_Harvested] %></p>

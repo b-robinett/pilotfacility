@@ -21,6 +21,12 @@
         <p><%= f.label :Submitter, "Submitter" %>
         <%= f.text_field :Submitter, class: 'form-control', :value => @dp_target[:Submitter] %></p>
         
+        <p><%= f.label :Time_Taken, "Date Data Collected" %>
+        <%= f.datetime_field :Time_Taken, class: 'form-control', :value => @dp_target[:Time_Taken] %></p>
+        
+        <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
+        <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500, :value => @dp_target[:Hrs_Post_Start] %></p>
+        
         <p><%= f.label :Var_Name, "Variable Name" %>
         <%= f.select :Var_Name, options_for_select(['pH','Optical Density','Temperature','Dry Weight'], @dp_target[:Var_Name]) %></p>
         
@@ -29,6 +35,9 @@
         
         <p><%= f.label :Var_Value, "Variable Value" %>
         <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001, :value => @dp_target[:Var_Value] %></p>
+        
+        <p><%= f.label :Notes, "Notes - e.g. plate media" %>
+        <%= f.text_field :Notes, class: 'form-control', :size => 30, :value => @dp_target[:Notes] %></p>
 
         <%= f.submit "Update Datapoint", class: "btn btn-primary" %>
       <% end %>
