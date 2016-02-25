@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203182550) do
+ActiveRecord::Schema.define(version: 20160225001012) do
 
   create_table "datapoints", force: :cascade do |t|
     t.integer  "Run_ID"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20160203182550) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.datetime "Time_Taken"
-    t.string   "Notes"
+    t.text     "Notes"
     t.integer  "Hrs_Post_Start"
   end
 
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20160203182550) do
     t.float    "Light_Path"
     t.integer  "Temperature"
     t.string   "Organism"
-    t.integer  "Strain_ID"
+    t.string   "Strain_ID"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.float    "CO2_Flow"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20160203182550) do
     t.integer  "Parent_Run"
     t.integer  "Day_Harvested"
     t.string   "Media_ID"
+    t.integer  "Reactor_vol"
+    t.string   "Reactor_Pos"
   end
 
 end

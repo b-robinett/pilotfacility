@@ -1,7 +1,7 @@
 class RunController < ApplicationController
   
   def dashboard
-    @current = Run.where("Actual_start_date < ? and Actual_end_date > ?", Date.today, Date.today)
+    @current = Run.where("Actual_start_date < ? and Actual_end_date IS NULL", Date.today)
   end
   
   def approval
@@ -56,7 +56,14 @@ class RunController < ApplicationController
                       :Strain_ID => params[:run][:Strain_ID],
                       :Actual_start_date => params[:run][:Actual_start_date],
                       :Actual_end_date => params[:run][:Actual_end_date],
-                      :Reactor_ID => params[:run][:Reactor_ID]
+                      :Reactor_ID => params[:run][:Reactor_ID],
+                      :Reactor_Pos => params[:run][:Reactor_Pos],
+                      :Day_Harvested => params[:run][:Day_Harvested],
+                      :Media_ID => params[:run][:Media_ID],
+                      :Parent_Run => params[:run][:Parent_Run],
+                      :Reactor_vol => params[:run][:Reactor_vol],
+                      :Air_Flow => params[:run][:Air_Flow],
+                      :CO2_Flow => params[:run][:CO2_Flow]
                       )
   end
   

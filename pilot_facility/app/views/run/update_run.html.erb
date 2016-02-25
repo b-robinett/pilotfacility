@@ -15,6 +15,36 @@
         
         <%= f.hidden_field :id, :value => @target[:id] %></p>
         
+        <p><b>Start Day Fields</b></p>
+
+        <p><%= f.label :Actual_start_date, "Start Date" %>
+        <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
+
+        <p><%= f.label :Reactor_ID, "Reactor ID" %>
+        <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 22 %></p>
+
+        <p><%= f.label :Reactor_Pos, "Reactor Position" %>
+        <%= f.text_field :Reactor_Pos, class: 'form-control', :value => @target[:Reactor_Pos], :max => 22 %></p>
+
+        <p><%= f.label :Reactor_vol, "Reactor Volume (L)" %>
+        <%= f.number_field :Reactor_vol, class: 'form-control', :value => @target[:Reactor_vol], :max => 200 %></p>
+
+        <p><%= f.label :Media_ID, "Media ID" %>
+        <%= f.text_field :Media_ID, class: 'form-control', :value => @target[:Media_ID] %></p>
+
+        <p><%= f.label :Parent_Run, "Parent Run ID" %>
+        <%= f.number_field :Parent_Run, class: 'form-control', :value => @target[:Parent_Run], :max => 22 %></p>
+
+        <p><b>End Day Fields</b></p>
+
+        <p><%= f.label :Actual_end_date, "End Date" %>
+        <%= f.date_field :Actual_end_date, class: 'form-control' %></p>
+
+        <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
+        <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10, :value => @target[:Day_Harvested] %></p>
+
+        <p><b>Original Fields</b></p>
+
         <p><%= f.label :Scientist, "Requesting Scientist" %>
         <%= f.text_field :Scientist, class: 'form-control', :value => @target[:Scientist] %></p>
         
@@ -22,24 +52,15 @@
         <%= f.select :Organism, options_for_select(['Aponinum','Spirulina','Synechococcus 7942','E.coli'], @target[:Organism])%></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
-        <%= f.number_field :Strain_ID, class: 'form-control', :value => @target[:Strain_ID] %></p>
-        
-        <p><%= f.label :Actual_start_date, "Start Date" %>
-        <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
-        
-        <p><%= f.label :Actual_end_date, "End Date" %>
-        <%= f.date_field :Actual_end_date, class: 'form-control' %></p>
-        
-        <p><%= f.label :Reactor_ID, "Reactor ID" %>
-        <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 22 %></p>
-        
+        <%= f.text_field :Strain_ID, class: 'form-control', :value => @target[:Strain_ID] %></p>
+
         <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, options_for_select(['10L Nalgene','20L Nalgene','10L Flat Panel','50L Round','Raceway','Flask'], @target[:Reactor_Type]) %></p>
-        
+        <%= f.select :Reactor_Type, options_for_select(['10L Carboy','20L Carboy','10L Flat Panel','50L Round','Raceway','Flask'], @target[:Reactor_Type]) %></p>
+
         <p><%= f.label :Media, "Media" %>
         <%= f.select :Media, options_for_select(['1X SOT','1X BG11','3X BG11'], @target[:Media]) %></p>
         
-        <p><%= f.label :Start_OD, "Starting OD" %>
+        <p><%= f.label :Start_OD, "Target Starting OD" %>
         <%= f.number_field :Start_OD, class: 'form-control',  :step => 0.01, :in => 0..2, :value => @target[:Start_OD] %></p>
         
         <p><%= f.label :pH, "pH" %>
@@ -60,9 +81,6 @@
         <p><%= f.label :CO2_Flow, "CO2 Flow (L/min)" %>
         <%= f.number_field :CO2_Flow, class: 'form-control', :step => 0.1, :in => 0..1, :value => @target[:CO2_Flow] %></p>
         
-        <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
-        <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10, :value => @target[:Day_Harvested] %></p>
-
         <%= f.submit "Update Run", class: "btn btn-primary" %>
       <% end %>
     </body>

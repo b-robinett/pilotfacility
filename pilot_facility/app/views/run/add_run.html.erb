@@ -20,15 +20,15 @@
         <%= f.select :Organism, [['Aponinum'],['Spirulina'],['Synechococcus 7942'],['E.coli']]%></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
-        <%= f.number_field :Strain_ID, class: 'form-control' %></p>
+        <%= f.text_field :Strain_ID, class: 'form-control' %></p>
         
         <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, [['10L Nalgene'],['20L Nalgene'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']]%></p>
+        <%= f.select :Reactor_Type, [['10L Carboy'],['20L Carboy'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']]%></p>
         
         <p><%= f.label :Media, "Media" %>
         <%= f.select :Media, [['1X SOT'],['1X BG11'],['3X BG11']]%></p>
         
-        <p><%= f.label :Start_OD, "Starting OD" %>
+        <p><%= f.label :Start_OD, "Target Starting OD" %>
         <%= f.number_field :Start_OD, class: 'form-control',  :step => 0.01, :in => 0..2 %></p>
         
         <p><%= f.label :pH, "pH" %>
