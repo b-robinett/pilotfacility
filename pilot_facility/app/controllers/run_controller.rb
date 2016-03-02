@@ -1,19 +1,25 @@
 class RunController < ApplicationController
   
   def dashboard
-    @current = Run.where("Actual_start_date < ? and Actual_end_date IS NULL", Date.today)
+    @current = Run.where("Actual_start_date <= ? and Actual_end_date IS NULL", Date.today)
     @master_dict = Hash.new
     @current.each do |p|
       create_dict(p,@master_dict)
     end
   end
 
-  def create_dict(record,target_Dict)
+  def create_dict(record,target_dict)
       mini_dict = Hash.new
       last_OD_rec = Datapoint.where("id = ? and Var_Value = ?",record[:id], "Optical Density").last()
       
-      mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken]
-      mini_dict["Last_OD_val"] = last_OD_rec[:Var_Value]
+      if last_OD_rec
+        mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken]
+        mini_dict["Last_OD_val"] = last_OD_rec[:Var_Value]
+      else
+        mini_dict["Last_OD_date"] = "NA"
+        mini_dict["Last_OD_val"] = "NA"
+      end
+
       mini_dict["Start_date"] = record[:Actual_start_date].to_date
       mini_dict["Organism"] = record[:Organism]
       mini_dict["Strain_ID"] = record[:Strain_ID]
@@ -21,7 +27,7 @@ class RunController < ApplicationController
       mini_dict["Reactor_ID"] = record[:Reactor_ID]
       mini_dict["Light_Intensity"] = record[:Light_Intensity]
 
-      target_Dict[p[:id]] = mini_dict
+      target_dict[record[:id]] = mini_dict
   end
 
   def

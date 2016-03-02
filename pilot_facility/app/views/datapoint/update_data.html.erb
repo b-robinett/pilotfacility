@@ -6,7 +6,7 @@
 </div>
 <p></p>
 
-<div class = "center"><h1>Update a Run</h1></div>
+<div class = "center"><h1>Update a Datapoint</h1></div>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
@@ -31,7 +31,7 @@
         <%= f.select :Var_Name, options_for_select(['pH Probe','pH Meter','Optical Density','Temperature','Dry Weight','LB Plate','BG11 Plate'], @dp_target[:Var_Name]) %></p>
         
         <p><%= f.label :Var_Metric, "Variable Metric" %>
-        <%= f.select :Var_Metric, options_for_select(['pH','A750','A600','Celsius','Grams','Pos/Neg'], @dp_target[:Var_Metric]) %></p>
+        <%= f.select :Var_Metric, options_for_select(['pH','A750','A600','Celsius','Milligram','Pos/Neg'], @dp_target[:Var_Metric]) %></p>
         
         <p><%= f.label :Var_Value, "Variable Value" %>
         <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001, :value => @dp_target[:Var_Value] %></p>

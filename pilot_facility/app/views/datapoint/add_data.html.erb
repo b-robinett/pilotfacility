@@ -29,7 +29,7 @@
         <%= f.select :Var_Name, [['pH Probe'],['pH Meter'],['Optical Density'],['Temperature'],['Dry Weight'],['Microscopy'],['LB Plate'],['BG11 Plate']]%></p>
         
         <p><%= f.label :Var_Metric, "Variable Metric" %>
-        <%= f.select :Var_Metric, [['pH'],['A750'],['Celsius'],['Gram'],['Pos/Neg']]%></p>
+        <%= f.select :Var_Metric, [['pH'],['A750'],['Celsius'],['Milligram'],['Pos/Neg']]%></p>
         
         <p><%= f.label :Var_Value, "Variable Value" %>
         <%= f.number_field :Var_Value, class: 'form-control',  :step => 0.001 %></p>

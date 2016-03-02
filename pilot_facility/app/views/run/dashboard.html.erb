@@ -60,16 +60,17 @@
       <th>Last OD</th>
       <th>Date OD Taken</th>
     </tr>
-  <% @master_dict do |k,v| %>       
+  <% @master_dict.each_pair do |k,v| %>       
     <tr>
       <td><%= k %></td>  
-      <td><%= v[Start_date].to_date %></td>  
-      <td><%= v[Organism] %></td>  
-      <td><%= v[Strain_ID] %></td> 
-      <td><%= v[Reactor_Type] %></td> 
-      <td><%= v[Light_Intensity] %></td>
-      <td><%= v[Last_OD_val] %></td> 
-      <td><%= v[Last_OD_date] %></td>
+      <td><%= v["Start_date"].to_date %></td>  
+      <td><%= v["Organism"] %></td>  
+      <td><%= v["Strain_ID"] %></td> 
+      <td><%= v["Light_Intensity"] %></td>
+      <td><%= v["Reactor_ID"] %></td> 
+      <td><%= v["Reactor_Type"] %></td> 
+      <td><%= v["Last_OD_val"] %></td> 
+      <td><%= v["Last_OD_date"] %></td>
     </tr>
   <% end %>                        
   </table>  
