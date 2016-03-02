@@ -67,7 +67,7 @@
         <%= f.number_field :pH, class: 'form-control',  :step => 0.1, :in => 4..13, :value => @target[:pH] %></p>
         
         <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
-        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..350, :value => @target[:Light_Intensity] %></p>
+        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..600, :value => @target[:Light_Intensity] %></p>
         
         <p><%= f.label :Light_Path, "Light Path (cm)" %>
         <%= f.number_field :Light_Path, class: 'form-control', :step => 0.1, :value => @target[:Light_Path] %></p>

@@ -51,32 +51,25 @@
   <table>                         
     <tr>                          
       <th>Run ID</th>
-      <th>Scientist</th>
       <th>Start Date</th>
-      <th>End Date</th>
       <th>Organism</th>
       <th>Strain ID</th>
-      <th>Media</th>
-      <th>pH</th>
-      <th>Temperature</th>
       <th>Light Intensity</th>
       <th>Reactor ID</th>
       <th>Reactor Type</th>
+      <th>Last OD</th>
+      <th>Date OD Taken</th>
     </tr>
-  <% @current.each do |p| %>       
+  <% @master_dict do |k,v| %>       
     <tr>
-      <td><%= p[:id] %></td>  
-      <td><%= p[:Scientist] %></td> 
-      <td><%= p[:Actual_start_date] %></td>  
-      <td><%= p[:Actual_end_date] %></td>
-      <td><%= p[:Organism] %></td>  
-      <td><%= p[:Strain_ID] %></td>
-      <td><%= p[:Media] %></td>  
-      <td><%= p[:pH] %></td>
-      <td><%= p[:Temperature] %></td>  
-      <td><%= p[:Light_Intensity] %></td>
-      <td><%= p[:Reactor_ID] %></td>  
-      <td><%= p[:Reactor_Type] %></td>
+      <td><%= k %></td>  
+      <td><%= v[Start_date].to_date %></td>  
+      <td><%= v[Organism] %></td>  
+      <td><%= v[Strain_ID] %></td> 
+      <td><%= v[Reactor_Type] %></td> 
+      <td><%= v[Light_Intensity] %></td>
+      <td><%= v[Last_OD_val] %></td> 
+      <td><%= v[Last_OD_date] %></td>
     </tr>
   <% end %>                        
   </table>  
