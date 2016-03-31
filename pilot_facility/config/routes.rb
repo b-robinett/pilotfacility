@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   patch 'update_data' => 'datapoint#confirm_data_update'
   get 'add_data' => 'datapoint#add_data'
   post 'add_data' => 'datapoint#confirm_data_add'
+  get 'report' => 'run#report'
 end

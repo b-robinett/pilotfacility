@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<div align="left">
+</div>
+<p></p>
+<p><b>Run ID: </b><%= @id_passed %></p>
+
+<%= scatter_chart @od_data.pluck(:Hrs_Post_Start, :Var_Value), xtitle: "Hours Post Start", ytitle: "Optical Density @ A750" %>
+
+<%= scatter_chart @pH_data.pluck(:Hrs_Post_Start, :Var_Value), xtitle: "Hours Post Start", ytitle: "pH Probe" %>
+

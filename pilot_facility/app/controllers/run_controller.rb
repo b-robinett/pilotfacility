@@ -119,4 +119,13 @@ class RunController < ApplicationController
     @results = Run.where(@Variable => @Value)
   end
   
+  def report
+    @id_passed = params[:run_id]
+
+    @od_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Optical Density")
+    @pH_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "pH Probe")
+    @dw_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Dry Weight")
+
+  end
+
 end
