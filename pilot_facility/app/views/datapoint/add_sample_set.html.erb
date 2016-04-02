@@ -11,39 +11,19 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <body>
-      <%= form_for @sample_set, url: {action: "add_sample_set"} do |f| %>
-        
-        <p><%= f.label :Run_ID, "Run ID" %>
-        <%= f.number_field :Run_ID, class: 'form-control' %></p>
-        
-        <p><%= f.label :Submitter, "Submitter" %>
-        <%= f.text_field :Submitter, class: 'form-control' %></p>
-        
-        <p><%= f.label :Time_Taken, "Date Data Collected" %>
-        <%= f.date_field :Time_Taken, class: 'form-control' %></p>
-        
-        <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
-        <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500 %></p>
-        
-        <p><%= f.label :pH_probe, "pH Probe Reading" %>
-        <%= f.number_field :pH_probe, class: 'form-control' %></p>
+      <%= form_tag '/add_sample_set' do %>
+      <p><b>RUN ID: </b><%= number_field_tag 'Run_ID' %></p>
+      <p><b>Submitter: </b><%= text_field_tag 'Submitter' %></p>
+      <p><b>Time Taken (mm/dd/yy): </b><%= datetime_field_tag 'Time_Taken' %></p>
+      <p><b>Hours Post Start: </b><%= number_field_tag 'Hours_Post_Start' %></p>
+      <p><b>OD (A750): </b><%= number_field_tag 'OD' %></p>
+      <p><b>Dry Weight (mg): </b><%= number_field_tag 'Dry_Weight' %></p>
+      <p><b>pH Probe: </b><%= number_field_tag 'pH_Probe' %></p>
+      <p><b>pH Meter: </b><%= number_field_tag 'pH_Meter' %></p>
+      <p><b>BG11 Plate (1 or 0): </b><%= number_field_tag 'BG' %></p>
+      <p><b>LB Plate (1 or 0): </b><%= number_field_tag 'LB' %></p>
 
-        <p><%= f.label :pH_meter, "pH Meter Reading" %>
-        <%= f.number_field :pH_meter, class: 'form-control' %></p>
-
-        <p><%= f.label :OD, "Optical Density @ 750nm" %>
-        <%= f.number_field :OD, class: 'form-control' %></p>
-
-        <p><%= f.label :Dry_Weight, "Dry Weight (milligram)" %>
-        <%= f.number_field :Dry_Weight, class: 'form-control' %></p>
-
-        <p><%= f.label :LB_Plate, "CFU per 150uL on LB Plate" %>
-        <%= f.number_field :LB_Plate, class: 'form-control' %></p>
-
-        <p><%= f.label :BG_Plate, "CFU per 150uL on BG11 Plate" %>
-        <%= f.number_field :BG_Plate, class: 'form-control' %></p>
-
-        <%= f.submit "Submit Sample Set", class: "btn btn-primary" %>
+      <%= submit_tag 'Submit Sample Set' %> 
       <% end %>
     </body>
   </div>

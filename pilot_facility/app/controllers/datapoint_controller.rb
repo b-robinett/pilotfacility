@@ -48,29 +48,26 @@ class DatapointController < ApplicationController
 
   def confirm_sample_set
     
-    @dp_id_list = array.new()
+    var_Name_Arr = ["Optical Density","Dry Weight","pH Probe","pH Meter","BG11 Plate","LB Plate"]
+    var_Metric_Arr = ["A750","Milligram","pH","pH","Pos/Neg","Pos/Neg"]
+    var_Value_Arr = [params[:OD], params[:Dry_Weight], params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
 
-    for i in 1..5 
+    @dp_id_list = Array.new()
+    for i in 0..5 
       sample_set = Datapoint.new()
 
-      
-      sample_set.Run_ID = params[:sample_set][:Run_ID]
-      sample_set.Submitter = params[:sample_set][:Submitter]
-      sample_set.Time_Taken = params[:sample_set][:Time_Taken]
-      sample_set.Hrs_Post_Start = params[:sample_set][:Hrs_Post_Start]
-      sample_set.Var_Name = "Optical Density"
-      sample_set.Var_Metric = "A750"
-      sample_set.Var_Value = params[:sample_set][:OD]
+      sample_set.Run_ID = params[:Run_ID]
+      sample_set.Submitter = params[:Submitter]
+      sample_set.Time_Taken = params[:Time_Taken]
+      sample_set.Hrs_Post_Start = params[:Hrs_Post_Start]
+      sample_set.Var_Name = var_Name_Arr[i]
+      sample_set.Var_Metric = var_Metric_Arr[i]
+      sample_set.Var_Value = var_Value_Arr[i]
 
       sample_set.save!
       dp_id = Datapoint.last.id
       @dp_id_list.push(dp_id)
-
     end
-
-
-
-
   end
   
 end
