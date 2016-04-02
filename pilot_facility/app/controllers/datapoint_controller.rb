@@ -41,5 +41,36 @@ class DatapointController < ApplicationController
     
     @dp_record = Datapoint.last
   end
+
+  def add_sample_set
+    @sample_set = Datapoint.new()
+  end
+
+  def confirm_sample_set
+    
+    @dp_id_list = array.new()
+
+    for i in 1..5 
+      sample_set = Datapoint.new()
+
+      
+      sample_set.Run_ID = params[:sample_set][:Run_ID]
+      sample_set.Submitter = params[:sample_set][:Submitter]
+      sample_set.Time_Taken = params[:sample_set][:Time_Taken]
+      sample_set.Hrs_Post_Start = params[:sample_set][:Hrs_Post_Start]
+      sample_set.Var_Name = "Optical Density"
+      sample_set.Var_Metric = "A750"
+      sample_set.Var_Value = params[:sample_set][:OD]
+
+      sample_set.save!
+      dp_id = Datapoint.last.id
+      @dp_id_list.push(dp_id)
+
+    end
+
+
+
+
+  end
   
 end

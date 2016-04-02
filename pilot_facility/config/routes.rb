@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   get 'add_data' => 'datapoint#add_data'
   post 'add_data' => 'datapoint#confirm_data_add'
   get 'report' => 'run#report'
+  get 'add_sample_set' => 'datapoint#add_sample_set'
+  post 'add_sample_set' => 'datapoint#confirm_sample_set'
 end

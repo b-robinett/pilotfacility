@@ -58,7 +58,7 @@
         <%= f.select :Reactor_Type, options_for_select(['10L Carboy','20L Carboy','10L Flat Panel','50L Round','Raceway','Flask'], @target[:Reactor_Type]) %></p>
 
         <p><%= f.label :Media, "Media" %>
-        <%= f.select :Media, options_for_select(['1X SOT','1X BG11','3X BG11'], @target[:Media]) %></p>
+        <%= f.select :Media, options_for_select(['10X SOT','1X SOT','1X BG11','3X BG11'], @target[:Media]) %></p>
         
         <p><%= f.label :Start_OD, "Target Starting OD" %>
         <%= f.number_field :Start_OD, class: 'form-control',  :step => 0.01, :in => 0..2, :value => @target[:Start_OD] %></p>

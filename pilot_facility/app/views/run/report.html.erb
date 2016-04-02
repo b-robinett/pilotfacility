@@ -1,10 +1,54 @@
 <!DOCTYPE html>
+
 <div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
 </div>
+
 <p></p>
-<p><b>Run ID: </b><%= @id_passed %></p>
 
-<%= scatter_chart @od_data.pluck(:Hrs_Post_Start, :Var_Value), xtitle: "Hours Post Start", ytitle: "Optical Density @ A750" %>
+<div align="center">
+	<p></p>
+	<h1>RUN REPORT: <%= @id_passed %></h1>
+	<p></p>
 
-<%= scatter_chart @pH_data.pluck(:Hrs_Post_Start, :Var_Value), xtitle: "Hours Post Start", ytitle: "pH Probe" %>
+	<h2>Optical Density Over Time</h2>
+	<%= scatter_chart @od_data.pluck(:Hrs_Post_Start, :Var_Value), 
+											xtitle: "Hours Post Start", 
+											ytitle: "Optical Density @ A750",
+											width: "1000px",
+											height: "400px" %>
+	<p></p>
+
+	<h2>Dry Weight Over Time</h2>
+	<%= scatter_chart @dw_data.pluck(:Hrs_Post_Start, :Var_Value), 
+											xtitle: "Hours Post Start", 
+											ytitle: "Dry Weight (g)",
+											width: "1000px",
+											height: "400px" %>
+	<p></p>
+
+	<h2>Dry Weight vs Optical Density</h2>
+	<%= scatter_chart @combo_hash, 
+											xtitle: "Optical Density", 
+											ytitle: "Dry Weight",
+											width: "1000px",
+											height: "400px",
+											library: {trendlines: "0" }  %>
+
+	<p><b>Trendline Slope: </b><%= @r_squared.b %></p>
+	<p><b>Chi Squared: </b><%= @r_squared.r %></p>
+	<p></p>
+
+	<h2>pH Over Time</h2>
+	<%= scatter_chart @pH_data.pluck(:Hrs_Post_Start, :Var_Value), 
+											xtitle: "Hours Post Start", 
+											ytitle: "pH Probe",
+											width: "1000px",
+											height: "400px" %>
+
+</div>
+
+
 

@@ -56,6 +56,12 @@ class RunController < ApplicationController
     @run.Air_Flow = params[:run][:Air_Flow]
     @run.CO2_Flow = params[:run][:CO2_Flow]
     @run.Day_Harvested = params[:run][:Day_Harvested]
+    @run.Actual_start_date = params[:run][:Actual_start_date]
+    @run.Reactor_Type = params[:run][:Reactor_Type]
+    @run.Reactor_ID = params[:run][:Reactor_ID]
+    @run.Reactor_Pos = params[:run][:Reactor_Pos]
+    @run.Media_ID = params[:run][:Media_ID]
+    @run.Parent_Run = params[:run][:Parent_Run]
 
     @run.save!
     
@@ -124,8 +130,43 @@ class RunController < ApplicationController
 
     @od_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Optical Density")
     @pH_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "pH Probe")
-    @dw_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Dry Weight")
+    @dw_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Dry Weight") 
+
+    dw_hash = Hash.new
+    od_hash = Hash.new
+    
+    @od_data.each do |f|
+      od_hash[f.Hrs_Post_Start] = f.Var_Value
+    end
+
+    @dw_data.each do |u|
+      dw_hash[u.Hrs_Post_Start] = u.Var_Value
+    end
+
+    @combo_hash = Hash.new
+
+    dw_hash.each do |k,v|
+      if od_hash.has_key? (k)
+        @combo_hash[v] = od_hash[k]
+      end
+    end
+
+    dw_list = Array.new()
+    od_list = Array.new()
+
+    @combo_hash.each do |dw_val,od_val|
+      dw_list.push(dw_val)
+      puts dw_val
+      od_list.push(od_val)
+      puts od_val
+    end
+
+    vec_dw_list = dw_list.to_vector()
+    vec_od_list = od_list.to_vector()
+
+
+    @r_squared = Statsample::Regression::simple(vec_dw_list,vec_od_list)
+
 
   end
-
 end

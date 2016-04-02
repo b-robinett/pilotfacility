@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
+<div class = "center"><h1>Add a Sample Set</h1></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <body>
+      <%= form_for @sample_set, url: {action: "add_sample_set"} do |f| %>
+        
+        <p><%= f.label :Run_ID, "Run ID" %>
+        <%= f.number_field :Run_ID, class: 'form-control' %></p>
+        
+        <p><%= f.label :Submitter, "Submitter" %>
+        <%= f.text_field :Submitter, class: 'form-control' %></p>
+        
+        <p><%= f.label :Time_Taken, "Date Data Collected" %>
+        <%= f.date_field :Time_Taken, class: 'form-control' %></p>
+        
+        <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
+        <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500 %></p>
+        
+        <p><%= f.label :pH_probe, "pH Probe Reading" %>
+        <%= f.number_field :pH_probe, class: 'form-control' %></p>
+
+        <p><%= f.label :pH_meter, "pH Meter Reading" %>
+        <%= f.number_field :pH_meter, class: 'form-control' %></p>
+
+        <p><%= f.label :OD, "Optical Density @ 750nm" %>
+        <%= f.number_field :OD, class: 'form-control' %></p>
+
+        <p><%= f.label :Dry_Weight, "Dry Weight (milligram)" %>
+        <%= f.number_field :Dry_Weight, class: 'form-control' %></p>
+
+        <p><%= f.label :LB_Plate, "CFU per 150uL on LB Plate" %>
+        <%= f.number_field :LB_Plate, class: 'form-control' %></p>
+
+        <p><%= f.label :BG_Plate, "CFU per 150uL on BG11 Plate" %>
+        <%= f.number_field :BG_Plate, class: 'form-control' %></p>
+
+        <%= f.submit "Submit Sample Set", class: "btn btn-primary" %>
+      <% end %>
+    </body>
+  </div>
+</div>
