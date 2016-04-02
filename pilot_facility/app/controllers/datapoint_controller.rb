@@ -65,9 +65,14 @@ class DatapointController < ApplicationController
       sample_set.Var_Value = var_Value_Arr[i]
 
       sample_set.save!
+      
       dp_id = Datapoint.last.id
       @dp_id_list.push(dp_id)
     end
+
+    rescue ActiveRecord::RecordInvalid => @invalid
+
+    @dp_added = Datapoint.where(id: @dp_id_list)
   end
   
 end
