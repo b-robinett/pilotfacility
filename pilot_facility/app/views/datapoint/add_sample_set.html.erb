@@ -14,7 +14,7 @@
       <%= form_tag '/add_sample_set' do %>
       <p><b>RUN ID: </b><%= number_field_tag 'Run_ID' %></p>
       <p><b>Submitter: </b><%= text_field_tag 'Submitter' %></p>
-      <p><b>Date Taken (mm/dd/yyyy): </b><%= datetime_field_tag 'Time_Taken' %></p>
+      <p><b>Date Taken (mm/dd/yyyy): </b><%= date_field_tag 'Time_Taken' %></p>
       <p><b>Hours Post Start: </b><%= number_field_tag 'Hrs_Post_Start' %></p>
       <p><b>OD (A750): </b><%= number_field_tag 'OD', nil, :step => 0.001 %></p>
       <p><b>Dry Weight (mg): </b><%= number_field_tag 'Dry_Weight', nil, :step => 0.01 %></p>
