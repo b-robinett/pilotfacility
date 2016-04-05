@@ -53,6 +53,7 @@ class DatapointController < ApplicationController
     var_Value_Arr = [params[:OD], params[:Dry_Weight], params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
 
     @dp_id_list = Array.new()
+    
     for i in 0..5 
       sample_set = Datapoint.new()
 
@@ -69,10 +70,16 @@ class DatapointController < ApplicationController
       dp_id = Datapoint.last.id
       @dp_id_list.push(dp_id)
     end
-
-    rescue ActiveRecord::RecordInvalid => @invalid
+    
+    #puts @dp_id_list
 
     @dp_added = Datapoint.where(id: @dp_id_list)
+    #@dp_added.each do |x|
+    #  puts x.id
+    #end
+
+    rescue ActiveRecord::RecordInvalid => @invalid
+    
   end
   
 end

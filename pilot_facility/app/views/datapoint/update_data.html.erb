@@ -22,7 +22,7 @@
         <%= f.text_field :Submitter, class: 'form-control', :value => @dp_target[:Submitter] %></p>
         
         <p><%= f.label :Time_Taken, "Date Data Collected" %>
-        <%= f.datetime_field :Time_Taken, class: 'form-control', :value => @dp_target[:Time_Taken] %></p>
+        <%= f.date_field :Time_Taken, class: 'form-control', :value => @dp_target[:Time_Taken] %></p>
         
         <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
         <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500, :value => @dp_target[:Hrs_Post_Start] %></p>

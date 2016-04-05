@@ -18,7 +18,8 @@
 											xtitle: "Hours Post Start", 
 											ytitle: "Optical Density @ A750",
 											width: "1000px",
-											height: "400px" %>
+											height: "400px",
+											library: {trendlines: "0" } %>
 	<p></p>
 
 	<h2>Dry Weight Over Time</h2>
@@ -26,13 +27,14 @@
 											xtitle: "Hours Post Start", 
 											ytitle: "Dry Weight (g)",
 											width: "1000px",
-											height: "400px" %>
+											height: "400px",
+											library: {trendlines: "0" } %>
 	<p></p>
 
 	<h2>Dry Weight vs Optical Density</h2>
 	<%= scatter_chart @combo_hash, 
-											xtitle: "Optical Density", 
-											ytitle: "Dry Weight",
+											xtitle: "Dry Weight (mg)", 
+											ytitle: "Optical Density @ 750nm",
 											width: "1000px",
 											height: "400px",
 											library: {trendlines: "0" }  %>
@@ -46,7 +48,8 @@
 											xtitle: "Hours Post Start", 
 											ytitle: "pH Probe",
 											width: "1000px",
-											height: "400px" %>
+											height: "400px",
+											library: {trendlines: "0" } %>
 
 </div>
 
