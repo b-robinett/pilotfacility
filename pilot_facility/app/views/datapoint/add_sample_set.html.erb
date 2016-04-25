@@ -15,10 +15,10 @@
       <p><b>RUN ID: </b><%= number_field_tag 'Run_ID' %></p>
       <p><b>Submitter: </b><%= text_field_tag 'Submitter' %></p>
       <p><b>Date Taken (mm/dd/yyyy): </b><%= date_field_tag 'Time_Taken' %></p>
-      <p><b>Hours Post Start: </b><%= number_field_tag 'Hrs_Post_Start' %></p>
-      <p><b>OD (A750): </b><%= number_field_tag 'OD', nil, :step => 0.001 %></p>
-      <p><b>Dry Weight (mg/mL): </b><%= number_field_tag 'Dry_Weight', nil, :step => 0.001 %></p>
       <p><b>pH Probe: </b><%= number_field_tag 'pH_Probe', nil, :step => 0.01%></p>
+      <p><b>OD (A750): </b><%= number_field_tag 'OD', nil, :step => 0.001 %></p>
+      <p><b>Dry Weight - Filter (mg): </b><%= number_field_tag 'Dry_Weight_Pre', nil, :step => 0.001 %></p>
+      <p><b>Dry Weight - Filter + Sample (mg): </b><%= number_field_tag 'Dry_Weight_Post', nil, :step => 0.001 %></p>
       <p><b>pH Meter: </b><%= number_field_tag 'pH_Meter', nil, :step => 0.01 %></p>
       <p><b>BG11 Plate (1 or 0): </b><%= number_field_tag 'BG' %></p>
       <p><b>LB Plate (1 or 0): </b><%= number_field_tag 'LB' %></p>

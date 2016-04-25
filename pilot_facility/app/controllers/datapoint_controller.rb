@@ -48,27 +48,41 @@ class DatapointController < ApplicationController
 
   def confirm_sample_set
     
+    dw_calc = ((params[:Dry_Weight_Post].to_f - params[:Dry_Weight_Pre].to_f)/5).round(3)
+    print dw_calc
+    target_run = Run.find(params[:Run_ID])
+    start_day = target_run["Actual_start_date"].to_date
+    hrs_post_start = (params[:Time_Taken].to_date - start_day) * 24
+
     var_Name_Arr = ["Optical Density","Dry Weight","pH Probe","pH Meter","BG11 Plate","LB Plate"]
     var_Metric_Arr = ["A750","Milligram","pH","pH","Pos/Neg","Pos/Neg"]
-    var_Value_Arr = [params[:OD], params[:Dry_Weight], params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
+    var_Value_Arr = [params[:OD], dw_calc, params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
 
     @dp_id_list = Array.new()
+    @dp_err_arr = Array.new()
     
     for i in 0..5 
-      sample_set = Datapoint.new()
+      curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",params[:Run_ID], var_Name_Arr[i]).last
 
-      sample_set.Run_ID = params[:Run_ID]
-      sample_set.Submitter = params[:Submitter]
-      sample_set.Time_Taken = params[:Time_Taken]
-      sample_set.Hrs_Post_Start = params[:Hrs_Post_Start]
-      sample_set.Var_Name = var_Name_Arr[i]
-      sample_set.Var_Metric = var_Metric_Arr[i]
-      sample_set.Var_Value = var_Value_Arr[i]
+      if curr_data.Time_Taken != params[:Time_Taken]
+        sample_set = Datapoint.new()
 
-      sample_set.save!
-      
-      dp_id = Datapoint.last.id
-      @dp_id_list.push(dp_id)
+        sample_set.Run_ID = params[:Run_ID]
+        sample_set.Submitter = params[:Submitter]
+        sample_set.Time_Taken = params[:Time_Taken]
+        sample_set.Hrs_Post_Start = hrs_post_start
+        sample_set.Var_Name = var_Name_Arr[i]
+        sample_set.Var_Metric = var_Metric_Arr[i]
+        sample_set.Var_Value = var_Value_Arr[i]
+
+        sample_set.save
+        
+        dp_id = Datapoint.last.id
+        @dp_id_list.push(dp_id)
+
+      else
+        @dp_err_arr[]
+      end
     end
     
     #puts @dp_id_list
