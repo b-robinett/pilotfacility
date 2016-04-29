@@ -64,7 +64,27 @@ class DatapointController < ApplicationController
     for i in 0..5 
       curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",params[:Run_ID], var_Name_Arr[i]).last
 
-      if curr_data.Time_Taken != params[:Time_Taken]
+      if curr_data
+        if curr_data.Time_Taken != params[:Time_Taken]
+          sample_set = Datapoint.new()
+
+          sample_set.Run_ID = params[:Run_ID]
+          sample_set.Submitter = params[:Submitter]
+          sample_set.Time_Taken = params[:Time_Taken]
+          sample_set.Hrs_Post_Start = hrs_post_start
+          sample_set.Var_Name = var_Name_Arr[i]
+          sample_set.Var_Metric = var_Metric_Arr[i]
+          sample_set.Var_Value = var_Value_Arr[i]
+
+          sample_set.save
+          
+          dp_id = Datapoint.last.id
+          @dp_id_list.push(dp_id)
+
+        else
+          @dp_err_arr.push(var_Name_Arr[i])
+        end
+      else
         sample_set = Datapoint.new()
 
         sample_set.Run_ID = params[:Run_ID]
@@ -79,9 +99,6 @@ class DatapointController < ApplicationController
         
         dp_id = Datapoint.last.id
         @dp_id_list.push(dp_id)
-
-      else
-        @dp_err_arr[]
       end
     end
     
