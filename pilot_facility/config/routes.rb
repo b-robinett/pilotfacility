@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   get 'report' => 'run#report'
   get 'add_sample_set' => 'datapoint#add_sample_set'
   post 'add_sample_set' => 'datapoint#confirm_sample_set'
+  get 'comparison_report' => 'run#comparison_setup'
+  post 'comparison_report' => 'run#comparison_report'
 end

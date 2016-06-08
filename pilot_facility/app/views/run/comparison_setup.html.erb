@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+
+<div class = "center"><h1>Compare Runs</h1></div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-5">
+    <%= form_tag '/comparison_report' do %>
+      <b>Runs to compare (separate by commas): </b><%= text_field_tag 'value' %>
+      <%= submit_tag 'Compare' %> 
+    <% end %>
+  </div>
+</div>

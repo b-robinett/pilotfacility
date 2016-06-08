@@ -16,61 +16,59 @@
         <p><%= f.label :Scientist, "Requesting Scientist" %>
         <%= f.text_field :Scientist, class: 'form-control' %></p>
         
-        <p><%= f.label :Organism, "Select organism" %>
-        <%= f.select :Organism, [['Spirulina'],['Aponinum'],['Synechococcus 7942'],['E.coli']]%></p>
-        
-        <p><%= f.label :Strain_ID, "Strain ID" %>
-        <%= f.text_field :Strain_ID, class: 'form-control' %></p>
-        
-        <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, [['10L Carboy'],['20L Carboy'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']]%></p>
-        
-        <p><%= f.label :Media, "Media" %>
-        <%= f.select :Media, [['10X SOT'],['1X SOT'],['1X BG11'],['3X BG11']]%></p>
-        
-        <p><%= f.label :Start_OD, "Target Starting OD" %>
-        <%= f.number_field :Start_OD, class: 'form-control',  :step => 0.01, :in => 0..2 %></p>
-        
-        <p><%= f.label :pH, "pH" %>
-        <%= f.number_field :pH, class: 'form-control',  :step => 0.1, :in => 4..13 %></p>
-        
-        <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
-        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..600 %></p>
-        
-        <p><%= f.label :Light_Path, "Light Path (cm)" %>
-        <%= f.number_field :Light_Path, class: 'form-control', :step => 0.1 %></p>
-        
-        <p><%= f.label :Temperature, "Temperature (C)" %>
-        <%= f.number_field :Temperature, class: 'form-control', :in => 10..45 %></p>
-        
-        <p><%= f.label :Air_Flow, "Air Flow (L/min)" %>
-        <%= f.number_field :Air_Flow, class: 'form-control', :step => 0.1, :in => 0..5 %></p>
-        
-        <p><%= f.label :CO2_Flow, "CO2 Flow (L/min)" %>
-        <%= f.number_field :CO2_Flow, class: 'form-control', :step => 0.1, :in => 0..1 %></p>
-        
-        <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
-        <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10 %></p>
-        
-        <p><b>Start Day Fields</b></p>
-
         <p><%= f.label :Actual_start_date, "Start Date" %>
         <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
 
         <p><%= f.label :Reactor_ID, "Reactor ID" %>
         <%= f.number_field :Reactor_ID, class: 'form-control', :max => 22 %></p>
 
-        <p><%= f.label :Reactor_Pos, "Reactor Position" %>
-        <%= f.text_field :Reactor_Pos, class: 'form-control', :max => 22 %></p>
+        <p><%= f.label :Reactor_Type, "Reactor Type" %>
+        <%= f.select :Reactor_Type, [['10L Carboy'],['20L Carboy'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']]%></p>
 
         <p><%= f.label :Reactor_vol, "Reactor Volume (L)" %>
         <%= f.number_field :Reactor_vol, class: 'form-control', :max => 200 %></p>
 
-        <p><%= f.label :Media_ID, "Media ID" %>
-        <%= f.text_field :Media_ID, class: 'form-control' %></p>
+        <p><%= f.label :Light_Path, "Light Path (cm)" %>
+        <%= f.number_field :Light_Path, class: 'form-control', :step => 0.1 %></p>
+
+        <p><%= f.label :Reactor_Pos, "Reactor Position" %>
+        <%= f.text_field :Reactor_Pos, class: 'form-control', :max => 22 %></p>
+
+        <p><%= f.label :Organism, "Select organism" %>
+        <%= f.select :Organism, [['Spirulina'],['Aponinum'],['Synechococcus 7942'],['E.coli']]%></p>
+        
+        <p><%= f.label :Strain_ID, "Strain ID" %>
+        <%= f.text_field :Strain_ID, class: 'form-control' %></p>
+        
+        <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
+        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..600 %></p>
+
+        <p><%= f.label :Temperature, "Temperature (C)" %>
+        <%= f.number_field :Temperature, class: 'form-control', :in => 10..45 %></p>
+
+        <p><%= f.label :CO2_Flow, "CO2 Flow (L/min)" %>
+        <%= f.number_field :CO2_Flow, class: 'form-control', :step => 0.1, :in => 0..1 %></p>
+
+        <p><%= f.label :Air_Flow, "Air Flow (L/min)" %>
+        <%= f.number_field :Air_Flow, class: 'form-control', :step => 0.1, :in => 0..5 %></p>
+
+        <p><%= f.label :pH, "pH" %>
+        <%= f.number_field :pH, class: 'form-control',  :step => 0.1, :in => 4..13 %></p>
 
         <p><%= f.label :Parent_Run, "Parent Run ID" %>
         <%= f.number_field :Parent_Run, class: 'form-control', :max => 22 %></p>
+        
+        <p><%= f.label :Start_OD, "Target Starting OD" %>
+        <%= f.number_field :Start_OD, class: 'form-control',  :step => 0.01, :in => 0..2 %></p>
+        
+        <p><%= f.label :Media, "Media" %>
+        <%= f.select :Media, [['10X SOT'],['1X SOT'],['1X BG11'],['3X BG11']]%></p>
+
+        <p><%= f.label :Media_ID, "Media ID" %>
+        <%= f.text_field :Media_ID, class: 'form-control' %></p>
+        
+        <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
+        <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10 %></p>
         
         <%= f.submit "Submit Run for Approval", class: "btn btn-primary" %>
       <% end %>

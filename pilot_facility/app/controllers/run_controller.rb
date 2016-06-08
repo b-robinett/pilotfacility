@@ -166,7 +166,43 @@ class RunController < ApplicationController
 
 
     @r_squared = Statsample::Regression::simple(vec_dw_list,vec_od_list)
-
-
   end
+
+  def comparison_setup
+  end
+
+  def comparison_report
+    @input_string = params[:value].to_s.gsub(/\s+/, "")
+    @run_array = @input_string.split(",")
+    #@header_arr = @run_array.map { |x| ("Run " + x.to_s)}
+    @Hrs_array = [0,24,48,72,96,120,144]
+
+    @od_data = {}
+    @dw_data = {}
+    @pH_data = {}
+
+    build_hash(@od_data,"Optical Density")
+    build_hash(@dw_data,"Dry Weight")
+    build_hash(@pH_data,"pH Probe")
+  end
+
+  def build_hash(target,var_name)
+    
+    @run_array.each do |f|
+      internal_hash = {}
+      @Hrs_array.each { |z| internal_hash[z] = nil}
+      
+      temp_data = Datapoint.where("Run_ID = ? and Var_Name = ?", f, var_name)
+
+      temp_data.each do |rec| 
+        if internal_hash.has_key?(rec.Hrs_Post_Start)
+          internal_hash[rec.Hrs_Post_Start] = rec.Var_Value
+        end
+      end
+      
+      target[f] = internal_hash
+      puts internal_hash
+    end
+  end
+
 end

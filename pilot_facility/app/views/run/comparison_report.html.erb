@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+
+<p></p>
+
+<div align="center">
+	<p></p>
+	<h1>Runs Compared: </h1>
+	<%= @input_string %>
+	<p></p>
+
+	<h2>Optical Density Over Time</h2>
+	<%= line_chart @od_data.map { |k,v|
+				{name: k, data: v}},
+					xtitle: "Hours Post Start", 
+					ytitle: "Optical Density @ A750",
+					discrete: true,
+					width: "1000px",
+					height: "400px",
+					curvetype: 'function',
+					interpolateNulls: true %>
+
+	<h2>Dry Weight Over Time</h2>
+	<%= line_chart @dw_data.map { |k,v|
+				{name: k, data: v}},
+					xtitle: "Hours Post Start", 
+					ytitle: "Dry Weight (g)",
+					discrete: true,
+					width: "1000px",
+					height: "400px"  %>
+	<p></p>
+
+	<h2>pH Over Time</h2>
+	<%= line_chart @pH_data.map { |k,v|
+				{name: k, data: v}},
+					xtitle: "Hours Post Start", 
+					ytitle: "pH",
+					discrete: true,
+					width: "1000px",
+					height: "400px"  %>
+
+</div>
