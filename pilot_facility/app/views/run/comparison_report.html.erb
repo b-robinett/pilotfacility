@@ -11,7 +11,7 @@
 <div align="center">
 	<p></p>
 	<h1>Runs Compared: </h1>
-	<%= @input_string %>
+	<%= @run_array.join(", ") %>
 	<p></p>
 
 	<h2>Optical Density Over Time</h2>
@@ -22,8 +22,7 @@
 					discrete: true,
 					width: "1000px",
 					height: "400px",
-					curvetype: 'function',
-					interpolateNulls: true %>
+					library: {interpolateNulls: true} %>
 
 	<h2>Dry Weight Over Time</h2>
 	<%= line_chart @dw_data.map { |k,v|
@@ -32,7 +31,8 @@
 					ytitle: "Dry Weight (g)",
 					discrete: true,
 					width: "1000px",
-					height: "400px"  %>
+					height: "400px",
+					library: {interpolateNulls: true}  %>
 	<p></p>
 
 	<h2>pH Over Time</h2>
@@ -42,6 +42,7 @@
 					ytitle: "pH",
 					discrete: true,
 					width: "1000px",
-					height: "400px"  %>
+					height: "400px",
+					library: {interpolateNulls: true}  %>
 
 </div>

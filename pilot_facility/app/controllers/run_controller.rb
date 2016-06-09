@@ -172,36 +172,66 @@ class RunController < ApplicationController
   end
 
   def comparison_report
-    @input_string = params[:value].to_s.gsub(/\s+/, "")
-    @run_array = @input_string.split(",")
-    #@header_arr = @run_array.map { |x| ("Run " + x.to_s)}
-    @Hrs_array = [0,24,48,72,96,120,144]
+    @input_val = params[:value].to_s.gsub(/\s+/, "")
+    @run_array = @input_val.split(",")
 
     @od_data = {}
     @dw_data = {}
     @pH_data = {}
 
-    build_hash(@od_data,"Optical Density")
-    build_hash(@dw_data,"Dry Weight")
-    build_hash(@pH_data,"pH Probe")
+    build_hash(@od_data, "Optical Density")
+    build_hash(@dw_data, "Dry Weight")
+    build_hash(@pH_data, "pH Probe")
+  end
+
+  def run_lineage
+    @input_val = params[:run_lin_val]
+    @run_array = []
+    @run_array.push(@input_val)
+    
+    parent_run_id = 0
+    run_to_search = @input_val
+
+    for i in 1..100
+      rec_holder = Run.find(run_to_search)
+      if rec_holder.Parent_Run != nil
+        parent_run_id = rec_holder.Parent_Run
+        par_holder = Run.find(parent_run_id)
+        if par_holder.Reactor_ID != nil
+          run_to_search = parent_run_id
+          @run_array.push(parent_run_id)
+        else
+          break
+        end
+      else
+        break
+      end
+    end
+
+    @od_data = {}
+    @dw_data = {}
+    @pH_data = {}
+
+    build_hash(@od_data, "Optical Density")
+    build_hash(@dw_data, "Dry Weight")
+    build_hash(@pH_data, "pH Probe")
+
+    puts @run_array
+
+    render "comparison_report"
   end
 
   def build_hash(target,var_name)
-    
     @run_array.each do |f|
       internal_hash = {}
-      @Hrs_array.each { |z| internal_hash[z] = nil}
       
       temp_data = Datapoint.where("Run_ID = ? and Var_Name = ?", f, var_name)
 
       temp_data.each do |rec| 
-        if internal_hash.has_key?(rec.Hrs_Post_Start)
-          internal_hash[rec.Hrs_Post_Start] = rec.Var_Value
-        end
+        internal_hash[rec.Hrs_Post_Start] = rec.Var_Value
       end
       
       target[f] = internal_hash
-      puts internal_hash
     end
   end
 

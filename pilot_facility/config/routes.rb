@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   post 'add_sample_set' => 'datapoint#confirm_sample_set'
   get 'comparison_report' => 'run#comparison_setup'
   post 'comparison_report' => 'run#comparison_report'
+  post 'run_lineage' => 'run#run_lineage'
 end

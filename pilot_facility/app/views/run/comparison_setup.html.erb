@@ -14,5 +14,10 @@
       <b>Runs to compare (separate by commas): </b><%= text_field_tag 'value' %>
       <%= submit_tag 'Compare' %> 
     <% end %>
+    <p></p>
+    <%= form_tag '/run_lineage' do %>
+      <b>Trace lineage by Run ID: </b><%= number_field_tag 'run_lin_val', in: 1...400 %>
+      <%= submit_tag 'Submit' %>
+    <% end %>
   </div>
 </div>
