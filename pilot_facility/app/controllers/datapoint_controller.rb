@@ -48,7 +48,7 @@ class DatapointController < ApplicationController
 
   def confirm_sample_set
     
-    dw_calc = ((params[:Dry_Weight_Post].to_f - params[:Dry_Weight_Pre].to_f)/5).round(3)
+    dw_calc = ((params[:Dry_Weight_Post].to_f - params[:Dry_Weight_Pre].to_f)/params[:DW_vol]).round(3)
     print dw_calc
     target_run = Run.find(params[:Run_ID])
     start_day = target_run["Actual_start_date"].to_date

@@ -17,11 +17,12 @@
       <p><b>Date Taken (mm/dd/yyyy): </b><%= date_field_tag 'Time_Taken' %></p>
       <p><b>pH Probe: </b><%= number_field_tag 'pH_Probe', nil, :step => 0.01%></p>
       <p><b>OD (A750): </b><%= number_field_tag 'OD', nil, :step => 0.001 %></p>
-      <p><b>Dry Weight - Filter (mg): </b><%= number_field_tag 'Dry_Weight_Pre', nil, :step => 0.001 %></p>
-      <p><b>Dry Weight - Filter + Sample (mg): </b><%= number_field_tag 'Dry_Weight_Post', nil, :step => 0.001 %></p>
+      <p><b>Dry Weight Volume: </b><%= number_field_tag 'DW_vol', nil, :step => 1, :max => 20 %></p>
+      <p><b>Dry Weight - pre(mg): </b><%= number_field_tag 'Dry_Weight_Pre', nil, :step => 0.001 %></p>
+      <p><b>Dry Weight - post(mg): </b><%= number_field_tag 'Dry_Weight_Post', nil, :step => 0.001 %></p>
       <p><b>pH Meter: </b><%= number_field_tag 'pH_Meter', nil, :step => 0.01 %></p>
-      <p><b>BG11 Plate (1 or 0): </b><%= number_field_tag 'BG' %></p>
-      <p><b>LB Plate (1 or 0): </b><%= number_field_tag 'LB' %></p>
+      <p><b>BG11 Plate (CFU): </b><%= number_field_tag 'BG', nil, :step => 1 %></p>
+      <p><b>LB Plate (CFU): </b><%= number_field_tag 'LB', nil, :step => 1 %></p>
 
       <%= submit_tag 'Submit Sample Set' %> 
       <% end %>
