@@ -9,28 +9,26 @@ class RunController < ApplicationController
   end
 
   def create_dict(record,target_dict)
-      mini_dict = Hash.new
-      last_OD_rec = Datapoint.where("id = ? and Var_Value = ?",record[:id], "Optical Density").last()
-      
-      if last_OD_rec
-        mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken]
-        mini_dict["Last_OD_val"] = last_OD_rec[:Var_Value]
-      else
-        mini_dict["Last_OD_date"] = "NA"
-        mini_dict["Last_OD_val"] = "NA"
-      end
+    mini_dict = Hash.new
+    last_OD_rec = Datapoint.where("id = ? and Var_Value = ?",record[:id], "Optical Density").last()
+    
+    if last_OD_rec
+      mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken]
+      mini_dict["Last_OD_val"] = last_OD_rec[:Var_Value]
+    else
+      mini_dict["Last_OD_date"] = "NA"
+      mini_dict["Last_OD_val"] = "NA"
+    end
 
-      mini_dict["Start_date"] = record[:Actual_start_date].to_date
-      mini_dict["Organism"] = record[:Organism]
-      mini_dict["Strain_ID"] = record[:Strain_ID]
-      mini_dict["Reactor_Type"] = record[:Reactor_Type]
-      mini_dict["Reactor_ID"] = record[:Reactor_ID]
-      mini_dict["Light_Intensity"] = record[:Light_Intensity]
+    mini_dict["Start_date"] = record[:Actual_start_date].to_date
+    mini_dict["Organism"] = record[:Organism]
+    mini_dict["Strain_ID"] = record[:Strain_ID]
+    mini_dict["Reactor_Type"] = record[:Reactor_Type]
+    mini_dict["Reactor_ID"] = record[:Reactor_ID]
+    mini_dict["Light_Intensity"] = record[:Light_Intensity]
 
-      target_dict[record[:id]] = mini_dict
+    target_dict[record[:id]] = mini_dict
   end
-
-  def
   
   def approval
     @awaiting = Run.where("Actual_end_date IS NULL")
@@ -165,8 +163,12 @@ class RunController < ApplicationController
     vec_dw_list = dw_list.to_vector()
     vec_od_list = od_list.to_vector()
 
-
-    @r_squared = Statsample::Regression::simple(vec_dw_list,vec_od_list)
+    unless dw_list.length < 3
+      @stat = true
+      @r_squared = Statsample::Regression::simple(vec_dw_list,vec_od_list)
+    else
+      @stat = false
+    end
   end
 
   def comparison_setup

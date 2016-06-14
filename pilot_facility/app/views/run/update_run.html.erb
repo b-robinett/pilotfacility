@@ -21,10 +21,10 @@
         <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
 
         <p><%= f.label :Reactor_ID, "Reactor ID" %>
-        <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 22 %></p>
+        <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 45 %></p>
 
         <p><%= f.label :Reactor_Pos, "Reactor Position" %>
-        <%= f.text_field :Reactor_Pos, class: 'form-control', :value => @target[:Reactor_Pos], :max => 22 %></p>
+        <%= f.text_field :Reactor_Pos, class: 'form-control', :value => @target[:Reactor_Pos], :max => 30 %></p>
 
         <p><%= f.label :Reactor_vol, "Reactor Volume (L)" %>
         <%= f.number_field :Reactor_vol, class: 'form-control', :value => @target[:Reactor_vol], :max => 200, :step => 0.1 %></p>
@@ -33,7 +33,7 @@
         <%= f.text_field :Media_ID, class: 'form-control', :value => @target[:Media_ID] %></p>
 
         <p><%= f.label :Parent_Run, "Parent Run ID" %>
-        <%= f.number_field :Parent_Run, class: 'form-control', :value => @target[:Parent_Run], :max => 22 %></p>
+        <%= f.number_field :Parent_Run, class: 'form-control', :value => @target[:Parent_Run], :max => 300 %></p>
 
         <p><b>End Day Fields</b></p>
 
@@ -55,7 +55,7 @@
         <%= f.text_field :Strain_ID, class: 'form-control', :value => @target[:Strain_ID] %></p>
 
         <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, options_for_select(['10L Carboy','20L Carboy','10L Flat Panel','50L Round','Raceway','Flask'], @target[:Reactor_Type]) %></p>
+        <%= f.select :Reactor_Type, options_for_select(['10L Carboy','10L Glass Reactor','20L Carboy','20L Glass Reactor','10L Flat Panel','50L Round','Raceway','Flask'], @target[:Reactor_Type]) %></p>
 
         <p><%= f.label :Media, "Media" %>
         <%= f.select :Media, options_for_select(['10X SOT','1X SOT','1X BG11','3X BG11'], @target[:Media]) %></p>

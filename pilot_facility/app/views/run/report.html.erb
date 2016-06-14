@@ -39,8 +39,11 @@
 											height: "400px",
 											library: {trendlines: "0" }  %>
 
-	<p><b>Trendline Slope: </b><%= @r_squared.b %></p>
-	<p><b>Chi Squared: </b><%= @r_squared.r %></p>
+	<% if @stat %>
+		<p><b>Trendline Slope: </b><%= @r_squared.b %></p>
+		<p><b>Chi Squared: </b><%= @r_squared.r %></p>
+	<% end %>
+	
 	<p></p>
 
 	<h2>pH Over Time</h2>
