@@ -27,7 +27,7 @@
         <%= f.text_field :Reactor_Pos, class: 'form-control', :value => @target[:Reactor_Pos], :max => 22 %></p>
 
         <p><%= f.label :Reactor_vol, "Reactor Volume (L)" %>
-        <%= f.number_field :Reactor_vol, class: 'form-control', :value => @target[:Reactor_vol], :max => 200 %></p>
+        <%= f.number_field :Reactor_vol, class: 'form-control', :value => @target[:Reactor_vol], :max => 200, :step => 0.1 %></p>
 
         <p><%= f.label :Media_ID, "Media ID" %>
         <%= f.text_field :Media_ID, class: 'form-control', :value => @target[:Media_ID] %></p>

@@ -33,7 +33,7 @@ class RunController < ApplicationController
   def
   
   def approval
-    @awaiting = Run.where("Actual_start_date IS NULL")
+    @awaiting = Run.where("Actual_end_date IS NULL")
   end
   
   def add_run
@@ -62,6 +62,7 @@ class RunController < ApplicationController
     @run.Reactor_Pos = params[:run][:Reactor_Pos]
     @run.Media_ID = params[:run][:Media_ID]
     @run.Parent_Run = params[:run][:Parent_Run]
+    @run.Actual_end_date = params[:run][:Actual_end_date]
 
     @run.save!
     
