@@ -20,4 +20,5 @@ Rails.application.routes.draw do
   get 'comparison_report' => 'run#comparison_setup'
   post 'comparison_report' => 'run#comparison_report'
   post 'run_lineage' => 'run#run_lineage'
+  get 'download_data' => 'run#download_data'
 end

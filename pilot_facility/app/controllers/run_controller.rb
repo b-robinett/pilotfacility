@@ -61,6 +61,7 @@ class RunController < ApplicationController
     @run.Media_ID = params[:run][:Media_ID]
     @run.Parent_Run = params[:run][:Parent_Run]
     @run.Actual_end_date = params[:run][:Actual_end_date]
+    @run.Reactor_vol = params[:run][:Reactor_vol]
 
     @run.save!
     
@@ -106,22 +107,38 @@ class RunController < ApplicationController
   def search_results
     @Input_Var = params[:variable].to_s
     
-    if @Input_Var == "Run ID"
+    case @Input_Var
+    when "Run ID"
       @Variable = "id"
-    elsif @Input_Var == "Reactor Type"
+    when "Reactor Type"
       @Variable = "Reactor_Type"
-    elsif @Input_Var == "Reactor ID"
-      @Variable = "Reactor_ID"
-    elsif @Input_Var == "Strain ID"
+    when "Strain ID"
       @Variable = "Strain_ID"
-    elsif @Input_Var == "Scientist"
-      @Variable = "Scientist"
-    elsif @Input_Var == "Organism"
-      @Variable = "Organism"
+    when "Light Intensity"
+      @Variable = "Light_Intensity"
+    when "Media ID"
+      @Variable = "Media_ID"
     end
     
     @Value = params[:value].to_s
     @results = Run.where(@Variable => @Value)
+
+    @result_runs = []
+
+    @results.each do |rec|
+      @result_runs.push(rec[:id].to_int)
+    end   
+
+    puts "here"
+    puts @result_runs
+  end
+
+  def download_data
+    @dp_data = Datapoint.where(Run_ID: params[:result_runs])
+    respond_to do |format|
+      format.html
+      format.csv { send_data @dp_data.to_csv}
+    end
   end
   
   def report

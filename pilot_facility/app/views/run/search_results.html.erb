@@ -11,6 +11,8 @@
 <p><b>Your query variable was: </b><%= @Variable %></p>
 <p><b>Your query value was: </b><%= @Value %></p>
 <p><b>RESULTS: </b></p>
+<%= link_to "Download data as CSV", download_data_path(format: "csv", :result_runs => @result_runs) %>
+<p></p>
 <table>                         
   <tr>                          
     <th>Run ID</th>
@@ -28,7 +30,7 @@
   <tr>
     <td><%= p[:id] %></td>  
     <td><%= p[:Actual_start_date].to_date %></td>  
-    <td><%= p[:Actual_end_date] %></td>
+    <td><%= p[:Actual_end_date].to_date %></td>
     <td><%= p[:Organism] %></td>  
     <td><%= p[:Strain_ID] %></td>  
     <td><%= p[:pH] %></td>

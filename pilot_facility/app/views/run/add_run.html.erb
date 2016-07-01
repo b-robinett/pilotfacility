@@ -41,7 +41,7 @@
         <%= f.text_field :Strain_ID, class: 'form-control' %></p>
         
         <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
-        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..600 %></p>
+        <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..2000 %></p>
 
         <p><%= f.label :Temperature, "Temperature (C)" %>
         <%= f.number_field :Temperature, class: 'form-control', :in => 10..45 %></p>

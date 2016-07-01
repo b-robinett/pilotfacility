@@ -11,7 +11,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-5">
     <%= form_tag '/search' do %>
-      <%= select_tag 'variable', options_for_select([ "Scientist", "Reactor Type", "Reactor ID", "Organism", "Strain ID", "Run ID" ]) %>
+      <%= select_tag 'variable', options_for_select([ "Reactor Type", "Media ID", "Light Intensity", "Strain ID", "Run ID" ]) %>
       <%= text_field_tag 'value' %>
       <%= submit_tag 'Search' %> 
     <% end %>

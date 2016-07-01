@@ -6,6 +6,7 @@
   </form>
 </div>
 
+
 <p></p>
 
 <div align="center">
@@ -13,6 +14,7 @@
 	<h1>Runs Compared: </h1>
 	<%= @run_array.join(", ") %>
 	<p></p>
+	<%= link_to "Download data as CSV", download_data_path(format: "csv", :result_runs => @run_array) %>
 
 	<h2>Optical Density Over Time</h2>
 	<%= line_chart @od_data.map { |k,v|
