@@ -121,16 +121,13 @@ class RunController < ApplicationController
     end
     
     @Value = params[:value].to_s
-    @results = Run.where(@Variable => @Value)
+    @results = Run.where(@Variable => @Value).where("Actual_end_date IS NOT NULL")
 
     @result_runs = []
 
     @results.each do |rec|
       @result_runs.push(rec[:id].to_int)
     end   
-
-    puts "here"
-    puts @result_runs
   end
 
   def download_data
@@ -147,19 +144,14 @@ class RunController < ApplicationController
     @od_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Optical Density")
     @pH_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "pH Probe")
     @dw_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Dry Weight") 
+    @cpc_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "CPC") 
 
-    dw_hash = Hash.new
-    od_hash = Hash.new
-    
-    @od_data.each do |f|
-      od_hash[f.Hrs_Post_Start] = f.Var_Value
-    end
+    dw_hash = obj_hash_convert(@dw_data)
+    cpc_hash = obj_hash_convert(@cpc_data)
+    od_hash = obj_hash_convert(@od_data)
+    @cpc_per_dw = pc_analysis(dw_hash, cpc_hash)
 
-    @dw_data.each do |u|
-      dw_hash[u.Hrs_Post_Start] = u.Var_Value
-    end
-
-    @combo_hash = Hash.new
+    @combo_hash = {}
 
     dw_hash.each do |k,v|
       if od_hash.has_key? (k)
@@ -167,14 +159,12 @@ class RunController < ApplicationController
       end
     end
 
-    dw_list = Array.new()
-    od_list = Array.new()
+    dw_list = []
+    od_list = []
 
     @combo_hash.each do |dw_val,od_val|
       dw_list.push(dw_val)
-      puts dw_val
       od_list.push(od_val)
-      puts od_val
     end
 
     vec_dw_list = dw_list.to_vector()
@@ -195,13 +185,7 @@ class RunController < ApplicationController
     @input_val = params[:value].to_s.gsub(/\s+/, "")
     @run_array = @input_val.split(",")
 
-    @od_data = {}
-    @dw_data = {}
-    @pH_data = {}
-
-    build_hash(@od_data, "Optical Density")
-    build_hash(@dw_data, "Dry Weight")
-    build_hash(@pH_data, "pH Probe")
+    compile_data(@run_array)
   end
 
   def run_lineage
@@ -228,21 +212,13 @@ class RunController < ApplicationController
       end
     end
 
-    @od_data = {}
-    @dw_data = {}
-    @pH_data = {}
-
-    build_hash(@od_data, "Optical Density")
-    build_hash(@dw_data, "Dry Weight")
-    build_hash(@pH_data, "pH Probe")
-
-    puts @run_array
+    compile_data(@run_array)
 
     render "comparison_report"
   end
 
-  def build_hash(target,var_name)
-    @run_array.each do |f|
+  def build_hash(runarray,target,var_name)
+    runarray.each do |f|
       internal_hash = {}
       
       temp_data = Datapoint.where("Run_ID = ? and Var_Name = ?", f, var_name)
@@ -253,6 +229,54 @@ class RunController < ApplicationController
       
       target[f] = internal_hash
     end
+  end
+
+  def compile_data(runarray)
+    @od_data = {}
+    @dw_data = {}
+    @pH_data = {}
+    @cpc_data = {}
+
+    build_hash(runarray, @od_data, "Optical Density")
+    build_hash(runarray, @dw_data, "Dry Weight")
+    build_hash(runarray, @pH_data, "pH Probe")
+    build_hash(runarray, @cpc_data, "CPC")
+
+    @cpc_per_dw = {}
+
+    @dw_data.each do |k,v|
+      temp_hash = {}
+      
+      v.each do |q,r|
+        if @cpc_data[k].key?(q)
+          temp_hash[q] = (@cpc_data[k[q]]/100 * r)
+        end
+      end
+
+      @cpc_per_dw[k] = temp_hash
+    end
+  end
+
+  def obj_hash_convert(incoming_obj)
+    temp_hash = {}
+    
+    incoming_obj.each do |u|
+      temp_hash[u.Hrs_Post_Start] = u.Var_Value
+    end
+
+    return temp_hash
+  end
+
+  def pc_analysis(dw_data, pc_data)
+    pc_per_dw = {}
+
+    dw_data.each do |k,v|
+      if pc_data.key?(k)
+        pc_per_dw[k] = ((pc_data[k]/100) * v)
+      end
+    end
+
+    return pc_per_dw
   end
 
 end

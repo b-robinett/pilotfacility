@@ -12,11 +12,12 @@
 	<p></p>
 	<h1>RUN REPORT: <%= @id_passed %></h1>
 	<p></p>
+	<%= link_to "Download data as CSV", download_data_path(format: "csv", :result_runs => @id_passed) %>
 
-	<h2>Optical Density Over Time</h2>
-	<%= scatter_chart @od_data.pluck(:Hrs_Post_Start, :Var_Value), 
+	<h2> Total CPC content (g/L/day) over time</h2>
+	<%= scatter_chart @cpc_per_dw, 
 											xtitle: "Hours Post Start", 
-											ytitle: "Optical Density @ A750",
+											ytitle: "CPC Content (g/L/day)",
 											width: "1000px",
 											height: "400px",
 											library: {trendlines: "0" } %>
@@ -26,6 +27,24 @@
 	<%= scatter_chart @dw_data.pluck(:Hrs_Post_Start, :Var_Value), 
 											xtitle: "Hours Post Start", 
 											ytitle: "Dry Weight (g)",
+											width: "1000px",
+											height: "400px",
+											library: {trendlines: "0" } %>
+	<p></p>
+
+	<h2>CPC Percentage (g/g) Over Time</h2>
+	<%= scatter_chart @cpc_data.pluck(:Hrs_Post_Start, :Var_Value), 
+											xtitle: "Hours Post Start", 
+											ytitle: "Dry Weight (g)",
+											width: "1000px",
+											height: "400px",
+											library: {trendlines: "0" } %>
+	<p></p>
+
+	<h2>Optical Density Over Time</h2>
+	<%= scatter_chart @od_data.pluck(:Hrs_Post_Start, :Var_Value), 
+											xtitle: "Hours Post Start", 
+											ytitle: "Optical Density @ A750",
 											width: "1000px",
 											height: "400px",
 											library: {trendlines: "0" } %>
