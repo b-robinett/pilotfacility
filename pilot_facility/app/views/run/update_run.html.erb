@@ -49,7 +49,7 @@
         <%= f.text_field :Scientist, class: 'form-control', :value => @target[:Scientist] %></p>
         
         <p><%= f.label :Organism, "Select target organism" %>
-        <%= f.select :Organism, options_for_select(['Aponinum','Spirulina','Synechococcus 7942','E.coli'], @target[:Organism])%></p>
+        <%= f.select :Organism, options_for_select(['Aponinum','Arthrospira - NIES39', 'Arthrospira - UTex','Synechococcus 7942'], @target[:Organism])%></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
         <%= f.text_field :Strain_ID, class: 'form-control', :value => @target[:Strain_ID] %></p>
@@ -68,6 +68,9 @@
         
         <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
         <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..600, :value => @target[:Light_Intensity] %></p>
+
+        <p><%= f.label :Lightnotes, "Light Notes" %>
+        <%= f.text_field :Lightnotes, class: 'form-control', :value => @target[:Lightnotes] %></p>
         
         <p><%= f.label :Light_Path, "Light Path (cm)" %>
         <%= f.number_field :Light_Path, class: 'form-control', :step => 0.1, :value => @target[:Light_Path] %></p>

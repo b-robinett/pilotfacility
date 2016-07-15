@@ -49,6 +49,7 @@ class RunController < ApplicationController
     @run.pH = params[:run][:pH]
     @run.Start_OD = params[:run][:Start_OD]
     @run.Light_Intensity = params[:run][:Light_Intensity]
+    @run.Lightnotes = params[:run][:Lightnotes]
     @run.Light_Path = params[:run][:Light_Path]
     @run.Temperature = params[:run][:Temperature]
     @run.Air_Flow = params[:run][:Air_Flow]
@@ -84,6 +85,7 @@ class RunController < ApplicationController
                       :pH => params[:run][:pH],
                       :Start_OD => params[:run][:Start_OD],
                       :Light_Intensity => params[:run][:Light_Intensity],
+                      :Lightnotes => params[:run][:Lightnotes],
                       :Light_Path => params[:run][:Light_Path],
                       :Temperature => params[:run][:Temperature],
                       :Organism => params[:run][:Organism],
@@ -249,7 +251,7 @@ class RunController < ApplicationController
       
       v.each do |q,r|
         if @cpc_data[k].key?(q)
-          temp_hash[q] = (@cpc_data[k[q]]/100 * r)
+          temp_hash[q] = (@cpc_data[k][q]/100 * r)
         end
       end
 

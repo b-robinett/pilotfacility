@@ -35,13 +35,16 @@
         <%= f.text_field :Reactor_Pos, class: 'form-control', :max => 30 %></p>
 
         <p><%= f.label :Organism, "Select organism" %>
-        <%= f.select :Organism, [['Spirulina'],['Aponinum'],['Synechococcus 7942'],['E.coli']]%></p>
+        <%= f.select :Organism, [['Arthrospira - NIES39'],['Arthrospira - Utex'],['Aponinum'],['Synechococcus 7942']]%></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
         <%= f.text_field :Strain_ID, class: 'form-control' %></p>
         
         <p><%= f.label :Light_Intensity, "Light Intensity (microeinsteins)" %>
         <%= f.number_field :Light_Intensity, class: 'form-control', :in => 0..2000 %></p>
+
+        <p><%= f.label :Lightnotes, "Light INotes (e.g. red / blue / white)" %>
+        <%= f.text_field :Lightnotes, class: 'form-control', :max => 60 %></p>
 
         <p><%= f.label :Temperature, "Temperature (C)" %>
         <%= f.number_field :Temperature, class: 'form-control', :in => 10..45 %></p>
