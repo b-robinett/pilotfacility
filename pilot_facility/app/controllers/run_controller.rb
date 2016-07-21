@@ -41,28 +41,53 @@ class RunController < ApplicationController
   def confirm_run_add
     @run = Run.new
     
-    @run.Reactor_Type = params[:run][:Reactor_Type]
     @run.Scientist = params[:run][:Scientist]
+    @run.Actual_start_date = params[:run][:Actual_start_date]
+    @run.Reactor_ID = params[:run][:Reactor_ID]
+    @run.Reactor_Type = params[:run][:Reactor_Type]
     @run.Organism = params[:run][:Organism]
     @run.Strain_ID = params[:run][:Strain_ID]
-    @run.Media = params[:run][:Media]
-    @run.pH = params[:run][:pH]
-    @run.Start_OD = params[:run][:Start_OD]
-    @run.Light_Intensity = params[:run][:Light_Intensity]
-    @run.Lightnotes = params[:run][:Lightnotes]
-    @run.Light_Path = params[:run][:Light_Path]
-    @run.Temperature = params[:run][:Temperature]
-    @run.Air_Flow = params[:run][:Air_Flow]
-    @run.CO2_Flow = params[:run][:CO2_Flow]
-    @run.Day_Harvested = params[:run][:Day_Harvested]
-    @run.Actual_start_date = params[:run][:Actual_start_date]
-    @run.Reactor_Type = params[:run][:Reactor_Type]
-    @run.Reactor_ID = params[:run][:Reactor_ID]
-    @run.Reactor_Pos = params[:run][:Reactor_Pos]
-    @run.Media_ID = params[:run][:Media_ID]
     @run.Parent_Run = params[:run][:Parent_Run]
     @run.Actual_end_date = params[:run][:Actual_end_date]
-    @run.Reactor_vol = params[:run][:Reactor_vol]
+
+    if params[:Condition] == 'Specific'
+      @run.Media = params[:run][:Media]
+      @run.pH = params[:run][:pH]
+      @run.Start_OD = params[:run][:Start_OD]
+      @run.Light_Intensity = params[:run][:Light_Intensity]
+      @run.Lightnotes = params[:run][:Lightnotes]
+      @run.Light_Path = params[:run][:Light_Path]
+      @run.Temperature = params[:run][:Temperature]
+      @run.Air_Flow = params[:run][:Air_Flow]
+      @run.CO2_Flow = params[:run][:CO2_Flow]
+      @run.Day_Harvested = params[:run][:Day_Harvested]
+      @run.Reactor_Pos = params[:run][:Reactor_Pos]
+      @run.Media_ID = params[:run][:Media_ID]
+      @run.Reactor_vol = params[:run][:Reactor_vol]
+    elsif params[:Condition] == 'Standard Seed Train'
+      @run.Media = '1X SOT'
+      @run.pH = 9.5
+      @run.Start_OD = 0.1
+      @run.Light_Intensity = 200
+      @run.Lightnotes = 'white'
+      @run.Light_Path = 13.5
+      @run.Temperature = 30
+      @run.Air_Flow = 3
+      @run.CO2_Flow = 0.3
+      @run.Reactor_Pos = params[:run][:Reactor_Pos]
+      @run.Media_ID = params[:run][:Media_ID]
+      @run.Reactor_vol = 10
+    elsif params[:Condition] == 'Standard Flask'
+      @run.Media = '1X SOT'
+      @run.pH = 9.8
+      @run.Start_OD = 0.25
+      @run.Light_Intensity = 120
+      @run.Lightnotes = 'white'
+      @run.Light_Path = 2
+      @run.Temperature = 30
+      @run.Media_ID = params[:run][:Media_ID]
+      @run.Reactor_vol = 0.1
+    end
 
     @run.save!
     

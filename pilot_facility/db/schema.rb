@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715162638) do
+ActiveRecord::Schema.define(version: 20160721191532) do
 
   create_table "datapoints", force: :cascade do |t|
     t.integer  "Run_ID"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20160715162638) do
     t.float    "Reactor_vol"
     t.string   "Reactor_Pos"
     t.string   "Lightnotes"
+    t.integer  "run_index"
   end
 
 end
