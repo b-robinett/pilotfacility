@@ -10,7 +10,7 @@ class DatapointController < ApplicationController
   
   def confirm_data_update
      @dp_new_target = Datapoint.find(params[:datapoint][:id])
-     @dp_new_target.update(:Submitter => params[:datapoint][:Submitter],
+     @dp_new_target.update(:Submitter => params[:datapoint][:Submitter].downcase,
                       :Run_ID => params[:datapoint][:Run_ID],
                       :Time_Taken => params[:datapoint][:Time_Taken],
                       :Hrs_Post_Start => params[:datapoint][:Hrs_Post_Start],
@@ -28,18 +28,27 @@ class DatapointController < ApplicationController
   def confirm_data_add
     @datapoint = Datapoint.new()
     
-    @datapoint.Run_ID = params[:datapoint][:Run_ID]
-    @datapoint.Submitter = params[:datapoint][:Submitter]
-    @datapoint.Time_Taken = params[:datapoint][:Time_Taken]
-    @datapoint.Hrs_Post_Start = params[:datapoint][:Hrs_Post_Start]
-    @datapoint.Var_Name = params[:datapoint][:Var_Name]
-    @datapoint.Var_Metric = params[:datapoint][:Var_Metric]
-    @datapoint.Var_Value = params[:datapoint][:Var_Value]
-    @datapoint.Notes = params[:datapoint][:Notes]
-    
-    @datapoint.save!
-    
-    @dp_record = Datapoint.last
+    curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",params[:datapoint][:Run_ID], params[:datapoint][:Var_Name]).last
+
+    if curr_data
+      if curr_data.Time_Taken != params[:datapoint][:Time_Taken]
+        @datapoint.Run_ID = params[:datapoint][:Run_ID]
+        @datapoint.Submitter = params[:datapoint][:Submitter].downcase
+        @datapoint.Time_Taken = params[:datapoint][:Time_Taken]
+        @datapoint.Hrs_Post_Start = params[:datapoint][:Hrs_Post_Start]
+        @datapoint.Var_Name = params[:datapoint][:Var_Name]
+        @datapoint.Var_Metric = params[:datapoint][:Var_Metric]
+        @datapoint.Var_Value = params[:datapoint][:Var_Value]
+        @datapoint.Notes = params[:datapoint][:Notes]
+        
+        @datapoint.save!
+        @dp_record = Datapoint.last
+      else
+        @dp_record = curr_data
+        @dp_err = true
+      end
+    end
+
   end
 
   def add_sample_set
@@ -96,6 +105,7 @@ class DatapointController < ApplicationController
 
             else
               @dp_err_arr.push(var_Name_Arr[i])
+              puts @dp_err_arr
             end
           else
             sample_set = Datapoint.new()

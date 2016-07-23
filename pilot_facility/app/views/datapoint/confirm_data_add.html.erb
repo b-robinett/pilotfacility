@@ -6,7 +6,10 @@
 </div>
 <p></p>
 
-<div class = "center"><h1>Following Datapoint Added</h1></div>
+<div class = "center">
+
+<h1><%= "Following Datapoint Added: " if !@dp_err %></h1>
+<h1><%= "Error - Data already present! " if @dp_err %></h1>
 
 <p><b>Datapoint ID: </b><%= @dp_record[:id] %></p>
 <p><b>Created At: </b><%= @dp_record[:created_at] %></p>
@@ -16,5 +19,7 @@
 <p><b>Variable Metric: </b><%= @dp_record[:Var_Metric] %></p>
 <p><b>Variable Value: </b><%= @dp_record[:Var_Value] %></p>
 <p><b>Notes: </b><%= @dp_record[:Notes] %></p>
-<p><b>Date Taken: </b><%= @dp_record[:Time_Taken] %></p>
+<p><b>Date Taken: </b><%= @dp_record[:Time_Taken].to_date %></p>
 <p><b>Hours Post Start: </b><%= @dp_record[:Hrs_Post_Start] %></p>
+
+</div>

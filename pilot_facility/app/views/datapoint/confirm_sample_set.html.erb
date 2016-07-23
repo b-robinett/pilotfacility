@@ -6,15 +6,17 @@
 </div>
 <p></p>
 <div align="center">
-	<p><b>Errors Below If Present</b></p>
-	<%= @invalid.message if @invalid %>
+
+  <p><b><%= "ERROR - Data Already Present in Database:" if @dp_err_arr[0] %></b></p>
+  <%= @dp_err_arr if @dp_err_arr[0] %>
+
   <h1>Datapoints Added</h1>
   <table>                         
     <tr>                          
       <th>Datapoint ID</th>
       <th>Run ID</th>
       <th>Submitter</th>
-      <th>Time Taken</th>
+      <th>Date Taken</th>
       <th>Hours Past Start</th>
       <th>Variable Name</th>
       <th>Variable Metric</th>
@@ -25,7 +27,7 @@
       <td><%= x[:id] %></td>  
       <td><%= x[:Run_ID] %></td>  
       <td><%= x[:Submitter] %></td>  
-      <td><%= x[:Time_Taken] %></td> 
+      <td><%= x[:Time_Taken].to_date %></td> 
       <td><%= x[:Hrs_Post_Start] %></td>
       <td><%= x[:Var_Name] %></td> 
       <td><%= x[:Var_Metric] %></td> 

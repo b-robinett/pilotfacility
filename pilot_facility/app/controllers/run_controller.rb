@@ -1,7 +1,7 @@
 class RunController < ApplicationController
   
   def dashboard
-    @current = Run.where("Actual_start_date <= ? and Actual_end_date IS NULL", Date.today)
+    @current = Run.where("Actual_end_date >= ? or Actual_end_date IS NULL", Date.today).where("Actual_start_date <= ?", Date.today)
     @master_dict = Hash.new
     @current.each do |p|
       create_dict(p,@master_dict)
@@ -10,10 +10,14 @@ class RunController < ApplicationController
 
   def create_dict(record,target_dict)
     mini_dict = Hash.new
-    last_OD_rec = Datapoint.where("id = ? and Var_Value = ?",record[:id], "Optical Density").last()
+    last_OD_rec = Datapoint.where("Run_ID = ? and Var_Name = ?", record[:id], "Optical Density").last()
+
+    puts "here"
+    puts last_OD_rec
+
     
     if last_OD_rec
-      mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken]
+      mini_dict["Last_OD_date"] = last_OD_rec[:Time_Taken].to_date
       mini_dict["Last_OD_val"] = last_OD_rec[:Var_Value]
     else
       mini_dict["Last_OD_date"] = "NA"
@@ -26,6 +30,7 @@ class RunController < ApplicationController
     mini_dict["Reactor_Type"] = record[:Reactor_Type]
     mini_dict["Reactor_ID"] = record[:Reactor_ID]
     mini_dict["Light_Intensity"] = record[:Light_Intensity]
+    mini_dict["Light_Notes"] = record[:Lightnotes]
 
     target_dict[record[:id]] = mini_dict
   end
@@ -41,7 +46,7 @@ class RunController < ApplicationController
   def confirm_run_add
     @run = Run.new
     
-    @run.Scientist = params[:run][:Scientist]
+    @run.Scientist = params[:run][:Scientist].downcase
     @run.Actual_start_date = params[:run][:Actual_start_date]
     @run.Reactor_ID = params[:run][:Reactor_ID]
     @run.Reactor_Type = params[:run][:Reactor_Type]
@@ -55,7 +60,7 @@ class RunController < ApplicationController
       @run.pH = params[:run][:pH]
       @run.Start_OD = params[:run][:Start_OD]
       @run.Light_Intensity = params[:run][:Light_Intensity]
-      @run.Lightnotes = params[:run][:Lightnotes]
+      @run.Lightnotes = params[:run][:Lightnotes].downcase
       @run.Light_Path = params[:run][:Light_Path]
       @run.Temperature = params[:run][:Temperature]
       @run.Air_Flow = params[:run][:Air_Flow]
