@@ -70,17 +70,23 @@ class DatapointController < ApplicationController
       redirect_to :action => 'add_sample_set'
     end
 
-    if target_run
-      start_day = target_run["Actual_start_date"].to_date
+    start_day = target_run["Actual_start_date"].to_date
+    end_day = target_run["Actual_end_date"].to_date
+    if end_day.nil?
+      end_day = Date.today
+    end
+
+    @dp_id_list = Array.new()
+    @dp_err_arr = Array.new()
+
+    if (params[:Time_Taken].to_date >= start_day) && (params[:Time_Taken].to_date <= end_day)
+      
       hrs_post_start = (params[:Time_Taken].to_date - start_day) * 24
 
       var_Name_Arr = ["Optical Density","Dry Weight","pH Probe","pH Meter","BG11 Plate","LB Plate"]
       var_Metric_Arr = ["A750","Milligram","pH","pH","CFU", "CFU"]
       var_Value_Arr = [params[:OD], dw_calc, params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
 
-      @dp_id_list = Array.new()
-      @dp_err_arr = Array.new()
-      
       for i in 0..5 
         if var_Value_Arr[i] != ""
           
@@ -132,6 +138,8 @@ class DatapointController < ApplicationController
         @dp_added = Datapoint.where(id: @dp_id_list)
       rescue ActiveRecord::RecordInvalid => @invalid
       end
+    else
+      @dp_err_arr[0] = "Date Taken does not fall within Run Schedule"
     end
   end
   

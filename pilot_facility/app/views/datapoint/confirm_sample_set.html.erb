@@ -7,7 +7,7 @@
 <p></p>
 <div align="center">
 
-  <p><b><%= "ERROR - Data Already Present in Database:" if @dp_err_arr[0] %></b></p>
+  <p><b><%= "ERRORS" if @dp_err_arr[0] %></b></p>
   <%= @dp_err_arr if @dp_err_arr[0] %>
 
   <h1>Datapoints Added</h1>
@@ -22,17 +22,20 @@
       <th>Variable Metric</th>
       <th>Variable Value</th>
     </tr>
-  <% @dp_added.each do |x| %>       
-    <tr>
-      <td><%= x[:id] %></td>  
-      <td><%= x[:Run_ID] %></td>  
-      <td><%= x[:Submitter] %></td>  
-      <td><%= x[:Time_Taken].to_date %></td> 
-      <td><%= x[:Hrs_Post_Start] %></td>
-      <td><%= x[:Var_Name] %></td> 
-      <td><%= x[:Var_Metric] %></td> 
-      <td><%= x[:Var_Value] %></td> 
-    </tr>
-  <% end %>                        
-  </table>  
+  <% unless @dp_added.nil? %>
+    <% @dp_added.each do |x|  %>       
+      <tr>
+        <td><%= x[:id] %></td>  
+        <td><%= x[:Run_ID] %></td>  
+        <td><%= x[:Submitter] %></td>  
+        <td><%= x[:Time_Taken].to_date %></td> 
+        <td><%= x[:Hrs_Post_Start] %></td>
+        <td><%= x[:Var_Name] %></td> 
+        <td><%= x[:Var_Metric] %></td> 
+        <td><%= x[:Var_Value] %></td> 
+      </tr>
+    <% end %>                        
+    </table> 
+  <% end %> 
+
 </div>
