@@ -21,4 +21,6 @@ Rails.application.routes.draw do
   post 'comparison_report' => 'run#comparison_report'
   post 'run_lineage' => 'run#run_lineage'
   get 'download_data' => 'run#download_data'
+  get 'add_tot_protein' => 'datapoint#add_tot_protein'
+  post 'add_tot_protein' => 'datapoint#confirm_tot_protein'
 end

@@ -143,4 +143,37 @@ class DatapointController < ApplicationController
     end
   end
   
+  def add_tot_protein
+  end
+
+  def confirm_tot_protein
+    @filecontent = params[:tp_data_file].read
+    @data_arr = @filecontent.split(' ')
+    @data_arr = @data_arr[33..128]
+
+    @plate_data = Array.new()
+    temp_arr = Array.new()
+
+    @plate_file = params[:plate_layout_file]
+    CSV.foreach(@plate_file.path) do |row|
+      if !row.nil?
+        temp_arr.push(row)
+      end
+    end
+
+    temp_arr.delete_at(0)
+
+    for i in temp_arr
+      i.delete_at(0)
+      for x in i
+        @plate_data.push(x)
+      end
+    end
+
+    @tot_prot_hash = Hash[@plate_data.zip @data_arr]
+
+    # build standard curve
+    # redo values in hash to convert absorbance to mg/mL
+    
+  end
 end

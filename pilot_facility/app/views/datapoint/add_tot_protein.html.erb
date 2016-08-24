@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+<div class = "center"><h1>Add Total Protein Data</h1></div>
+
+<p></p>
+<%= form_tag({action: :confirm_tot_protein}, multipart: true) do %>
+  <p>Data File: <%= file_field_tag 'tp_data_file' %></p>
+  <p>Plate Layout: <%= file_field_tag 'plate_layout_file' %></p>
+  <%= submit_tag 'Upload' %> 
+<% end %>
+<p></p>
