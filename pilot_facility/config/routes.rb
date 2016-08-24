@@ -23,4 +23,5 @@ Rails.application.routes.draw do
   get 'download_data' => 'run#download_data'
   get 'add_tot_protein' => 'datapoint#add_tot_protein'
   post 'add_tot_protein' => 'datapoint#confirm_tot_protein'
+  get 'tot_prot_todb' => 'datapoint#tot_prot_todb'
 end

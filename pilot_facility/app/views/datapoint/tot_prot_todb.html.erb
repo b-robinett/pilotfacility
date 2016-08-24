@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+<div align="center">
+<h1>Datapoints Added</h1>
+  <table>                         
+    <tr>                          
+      <th>Datapoint ID</th>
+      <th>Run ID</th>
+      <th>Submitter</th>
+      <th>Date Taken</th>
+      <th>Hours Past Start</th>
+      <th>Variable Name</th>
+      <th>Variable Metric</th>
+      <th>Variable Value</th>
+    </tr>
+  <% unless @dp_added.nil? %>
+    <% @dp_added.each do |x|  %>       
+      <tr>
+        <td><%= x[:id] %></td>  
+        <td><%= x[:Run_ID] %></td>  
+        <td><%= x[:Submitter] %></td>  
+        <td><%= x[:Time_Taken].to_date %></td> 
+        <td><%= x[:Hrs_Post_Start] %></td>
+        <td><%= x[:Var_Name] %></td> 
+        <td><%= x[:Var_Metric] %></td> 
+        <td><%= x[:Var_Value] %></td> 
+      </tr>
+    <% end %>                        
+    </table> 
+  <% end %> 
+</div>

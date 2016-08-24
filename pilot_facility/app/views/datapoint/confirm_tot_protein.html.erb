@@ -7,12 +7,34 @@
 <p></p>
 <div align="center">
 
-<%= @filecontent %>
-<p></p>
-<%= @data_arr %>
-<p></p>
-<%= @plate_data %>
-<p></p>
-<%= @tot_prot_hash %>
+	<h2> Standard Curve</h2>
+		<%= scatter_chart @std_hash, 
+												xtitle: "mg/mL", 
+												ytitle: "Absorbance @ 562nm",
+												width: "1000px",
+												height: "400px",
+												library: {trendlines: "0" } %>
+		<p></p>
 
+		<p><b>Trendline Slope: </b><%= @std_curve.b.round(4) %></p>
+		<p><b>Intercept: </b><%= @std_curve.a.round(4) %></p>
+		<p><b>Chi Squared: </b><%= @std_curve.r.round(4) %></p>
+
+	<h2> Values to be entered into Database</h2>
+	  <table>                         
+	    <tr>                          
+	      <th>ID</th>
+	      <th>mg/mL total protein</th>
+	      <th>Sample Date</th>
+	    </tr>
+	  <% @prot_hash_todb.each_pair do |k,v| %>       
+	    <tr>
+	      <td><%= k %></td>  
+	      <td><%= v[0] %></td>
+	      <td><%= v[1] %></td>
+	    </tr>
+	  <% end %>                        
+	  </table> 
+
+ 	<td><%= link_to("Submit Data", tot_prot_todb_path(:data_hash => @prot_hash_todb, :submitter => @Submitter)) %></td>
 </div>

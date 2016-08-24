@@ -11,6 +11,7 @@
 <%= form_tag({action: :confirm_tot_protein}, multipart: true) do %>
   <p>Data File: <%= file_field_tag 'tp_data_file' %></p>
   <p>Plate Layout: <%= file_field_tag 'plate_layout_file' %></p>
+  <p>Submitter: <%= text_field_tag 'Submitter' %></p>
   <%= submit_tag 'Upload' %> 
 <% end %>
 <p></p>

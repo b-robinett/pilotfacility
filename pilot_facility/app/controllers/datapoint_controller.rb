@@ -147,6 +147,7 @@ class DatapointController < ApplicationController
   end
 
   def confirm_tot_protein
+    @Submitter = params[:Submitter]
     @filecontent = params[:tp_data_file].read
     @data_arr = @filecontent.split(' ')
     @data_arr = @data_arr[33..128]
@@ -171,9 +172,130 @@ class DatapointController < ApplicationController
     end
 
     @tot_prot_hash = Hash[@plate_data.zip @data_arr]
+    @tot_prot_hash.delete_if { |k,v| k.nil? }
 
-    # build standard curve
-    # redo values in hash to convert absorbance to mg/mL
-    
+    std_mgml = []
+    std_abs = []
+
+    @tot_prot_hash.each do |k,v|
+      if k.include? "std"
+        temp = k[4..-1].to_f
+        std_abs.push(v.to_f)
+        std_mgml.push(temp) 
+        @tot_prot_hash.delete(k)
+      else
+        @tot_prot_hash[k] = v.to_f
+      end
+    end
+
+    @std_hash = Hash[std_mgml.zip std_abs]
+
+    vec_std_mgml = std_mgml.to_vector()
+    vec_std_abs = std_abs.to_vector()
+
+    @std_curve = Statsample::Regression::simple(vec_std_mgml,vec_std_abs)
+    slope = @std_curve.b
+    intercept = @std_curve.a 
+
+    @prot_hash_todb = {}
+
+    @tot_prot_hash.each do |r,w|
+      
+      name_arr = r.split("_")
+      run_id = name_arr[0][1..-1].to_i
+      date = name_arr[1]
+      month = date[0..1].to_i
+      day = date[2..3].to_i
+      year = date[4..7].to_i
+      
+      if date.length > 8
+        puts "True"
+        hour = date[8..9].to_i
+        minute = date[10..11].to_i
+        new_date = DateTime.new(year,month,day,hour,minute)
+        puts new_date
+      else
+        new_date = DateTime.new(year,month,day)
+      end
+      
+
+      prot_val = ((w - intercept) / slope).round(4)
+
+      @prot_hash_todb[run_id] = [prot_val, new_date]
+    end
   end
+
+  def tot_prot_todb
+    @prot_hash = params[:data_hash]
+    submitter = params[:submitter]
+    @dp_id_list = []
+
+    @prot_hash.each do |x,y|
+      begin
+        target_run = Run.find(x)
+      rescue ActiveRecord::RecordNotFound
+        flash[:notice] = "ERROR: No Run with id " + x.to_s
+        redirect_to :action => 'add_tot_protein'
+      end
+
+      start_day = target_run["Actual_start_date"].to_date
+      end_day = target_run["Actual_end_date"].to_date
+      
+      if end_day.nil?
+        end_day = Date.today
+      end
+
+      if (y[1].to_datetime >= start_day) && (y[1].to_datetime <= end_day)
+        curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",x, "Total Protein").last
+
+        hours = y[1].to_datetime.strftime("%H").to_i
+        puts hours
+        testdate = y[1].to_date - start_day
+        puts testdate
+        hrs_post_start = ((y[1].to_date - start_day).to_i) * 24 + hours
+
+
+        puts hrs_post_start
+
+        if curr_data
+          if curr_data.Time_Taken != y[1].to_datetime
+            new_data = Datapoint.new()
+            new_data.Run_ID = x
+            new_data.Var_Name = "Total Protein"
+            new_data.Var_Metric = "mg/mL"
+            new_data.Var_Value = y[0].to_f
+            new_data.Submitter = submitter
+            new_data.Time_Taken = y[1].to_datetime
+            new_data.Hrs_Post_Start = hrs_post_start
+            new_data.save
+
+            dp_id = Datapoint.last.id
+            @dp_id_list.push(dp_id)
+          end
+        else
+          new_data = Datapoint.new()
+          new_data.Run_ID = x
+          new_data.Var_Name = "Total Protein"
+          new_data.Var_Metric = "mg/mL"
+          new_data.Var_Value = y[0].to_f
+          new_data.Submitter = submitter
+          new_data.Time_Taken = y[1].to_datetime
+          new_data.Hrs_Post_Start = hrs_post_start
+          new_data.save
+
+          dp_id = Datapoint.last.id
+          @dp_id_list.push(dp_id)
+        end
+
+      end
+
+    end
+
+    begin
+      @dp_added = Datapoint.where(id: @dp_id_list)
+    rescue ActiveRecord::RecordInvalid => @invalid
+    end
+
+  end
+
 end
