@@ -23,18 +23,20 @@
 	<h2> Values to be entered into Database</h2>
 	  <table>                         
 	    <tr>                          
+	      <th>Index</th>
 	      <th>ID</th>
 	      <th>mg/mL total protein</th>
 	      <th>Sample Date</th>
 	    </tr>
-	  <% @prot_hash_todb.each_pair do |k,v| %>       
+	  <% $prot_hash_todb.each_pair do |k,v| %>       
 	    <tr>
 	      <td><%= k %></td>  
 	      <td><%= v[0] %></td>
 	      <td><%= v[1] %></td>
+	      <td><%= v[2] %></td>
 	    </tr>
 	  <% end %>                        
 	  </table> 
 
- 	<td><%= link_to("Submit Data", tot_prot_todb_path(:data_hash => @prot_hash_todb, :submitter => @Submitter)) %></td>
+ 	<td><%= link_to("Submit Data", tot_prot_todb_path(:submitter => @Submitter)) %></td>
 </div>

@@ -197,8 +197,9 @@ class DatapointController < ApplicationController
     slope = @std_curve.b
     intercept = @std_curve.a 
 
-    @prot_hash_todb = {}
+    $prot_hash_todb = {}
 
+    index = 1
     @tot_prot_hash.each do |r,w|
       
       name_arr = r.split("_")
@@ -209,11 +210,9 @@ class DatapointController < ApplicationController
       year = date[4..7].to_i
       
       if date.length > 8
-        puts "True"
         hour = date[8..9].to_i
         minute = date[10..11].to_i
         new_date = DateTime.new(year,month,day,hour,minute)
-        puts new_date
       else
         new_date = DateTime.new(year,month,day)
       end
@@ -221,20 +220,21 @@ class DatapointController < ApplicationController
 
       prot_val = ((w - intercept) / slope).round(4)
 
-      @prot_hash_todb[run_id] = [prot_val, new_date]
+      $prot_hash_todb[index] = [run_id, prot_val, new_date]
+
+      index += 1
     end
   end
 
   def tot_prot_todb
-    @prot_hash = params[:data_hash]
     submitter = params[:submitter]
     @dp_id_list = []
 
-    @prot_hash.each do |x,y|
+    $prot_hash_todb.each do |x,y|
       begin
-        target_run = Run.find(x)
+        target_run = Run.find(y[0])
       rescue ActiveRecord::RecordNotFound
-        flash[:notice] = "ERROR: No Run with id " + x.to_s
+        flash[:notice] = "ERROR: No Run with id " + y[0].to_s
         redirect_to :action => 'add_tot_protein'
       end
 
@@ -244,42 +244,41 @@ class DatapointController < ApplicationController
       if end_day.nil?
         end_day = Date.today
       end
+      
+      @bad_data = {}
 
-      if (y[1].to_datetime >= start_day) && (y[1].to_datetime <= end_day)
-        curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",x, "Total Protein").last
+      if (y[2].to_datetime >= start_day) && (y[2].to_datetime <= end_day)
+        curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",y[0], "Total Protein").last
 
-        hours = y[1].to_datetime.strftime("%H").to_i
-        puts hours
-        testdate = y[1].to_date - start_day
-        puts testdate
-        hrs_post_start = ((y[1].to_date - start_day).to_i) * 24 + hours
-
-
-        puts hrs_post_start
+        hours = y[2].to_datetime.strftime("%H").to_i
+        testdate = y[2].to_date - start_day
+        hrs_post_start = ((y[2].to_date - start_day).to_i) * 24 + hours
 
         if curr_data
-          if curr_data.Time_Taken != y[1].to_datetime
+          if curr_data.Time_Taken != y[2].to_datetime
             new_data = Datapoint.new()
-            new_data.Run_ID = x
+            new_data.Run_ID = y[0]
             new_data.Var_Name = "Total Protein"
             new_data.Var_Metric = "mg/mL"
-            new_data.Var_Value = y[0].to_f
+            new_data.Var_Value = y[1].to_f
             new_data.Submitter = submitter
-            new_data.Time_Taken = y[1].to_datetime
+            new_data.Time_Taken = y[2].to_datetime
             new_data.Hrs_Post_Start = hrs_post_start
             new_data.save
 
             dp_id = Datapoint.last.id
             @dp_id_list.push(dp_id)
+          else
+            @bad_data[x] = y
           end
         else
           new_data = Datapoint.new()
-          new_data.Run_ID = x
+          new_data.Run_ID = y[0]
           new_data.Var_Name = "Total Protein"
           new_data.Var_Metric = "mg/mL"
-          new_data.Var_Value = y[0].to_f
+          new_data.Var_Value = y[1].to_f
           new_data.Submitter = submitter
-          new_data.Time_Taken = y[1].to_datetime
+          new_data.Time_Taken = y[2].to_datetime
           new_data.Hrs_Post_Start = hrs_post_start
           new_data.save
 
@@ -296,6 +295,9 @@ class DatapointController < ApplicationController
     rescue ActiveRecord::RecordInvalid => @invalid
     end
 
+    if @bad_data.empty? == false
+      @bad_data_error_msg = "ERROR: Data already present for timepoints given. See Below."
+    end
   end
 
 end

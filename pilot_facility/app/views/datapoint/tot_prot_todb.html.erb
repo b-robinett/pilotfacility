@@ -5,6 +5,36 @@
   </form>
 </div>
 <p></p>
+
+<% if @bad_data_error_msg %>
+  <div align="center" class="notice"><%= @bad_data_error_msg %></div>
+<% end %>
+
+<% if @bad_data.empty? == false %>
+  <div align="center">
+	<h1>Data NOT Added</h1>
+	  <table>                         
+	    <tr>                          
+	      <th>Index from Sample</th>
+	      <th>Run ID</th>
+	  	  <th>Protein mg/mL</th>
+	      <th>Date Taken</th>
+	    </tr>
+	  <% unless @bad_data.nil? %>
+	    <% @bad_data.each do |x,y|  %>       
+	      <tr>
+	        <td><%= x %></td>  
+	        <td><%= y[0] %></td>  
+	        <td><%= y[1] %></td> 
+	        <td><%= y[2] %></td> 
+	      </tr>
+	    <% end %>                        
+	    </table> 
+	  <% end %> 
+	</div>
+<% end %>
+
+
 <div align="center">
 <h1>Datapoints Added</h1>
   <table>                         
@@ -34,3 +64,4 @@
     </table> 
   <% end %> 
 </div>
+
