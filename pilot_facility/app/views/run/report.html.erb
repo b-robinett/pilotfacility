@@ -50,6 +50,15 @@
 											library: {trendlines: "0" } %>
 	<p></p>
 
+	<h2>Normalized Optical Density Over Time</h2>
+	<%= scatter_chart @norm_od_data, 
+											xtitle: "Hours Post Start", 
+											ytitle: "Percentage of Starting OD",
+											width: "1000px",
+											height: "400px",
+											library: {trendlines: "0" } %>
+	<p></p>
+
 	<h2>Dry Weight vs Optical Density</h2>
 	<%= scatter_chart @combo_hash, 
 											xtitle: "Dry Weight (mg)", 

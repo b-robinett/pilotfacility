@@ -208,6 +208,8 @@ class RunController < ApplicationController
     else
       @stat = false
     end
+
+    @norm_od_data = normalize_data(od_hash)
   end
 
   def comparison_setup
@@ -287,6 +289,20 @@ class RunController < ApplicationController
 
       @cpc_per_dw[k] = temp_hash
     end
+
+    @norm_od_data = Hash.new()
+
+    run_id_array = []
+    @od_data.each do |q,r|
+      run_id_array.push(q.to_i)
+      @norm_od_data[q] = normalize_data(r)
+    end
+
+    lowest_val = run_id_array.min
+    puts lowest_val
+    @norm_od_data.delete(lowest_val)
+    check = @norm_od_data.has_key?(lowest_val)
+    puts check
   end
 
   def obj_hash_convert(incoming_obj)
@@ -297,6 +313,21 @@ class RunController < ApplicationController
     end
 
     return temp_hash
+  end
+
+  def normalize_data(raw_data)
+
+    start_val = 0
+    normalized_hash = {}
+
+    raw_data.each do |q,r|
+      if q == 0
+        start_val = r
+      end
+      normalized_hash[q] = ((r/start_val).to_f * 100).to_i
+    end
+    
+    return normalized_hash
   end
 
   def pc_analysis(dw_data, pc_data)

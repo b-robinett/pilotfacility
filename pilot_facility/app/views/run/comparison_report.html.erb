@@ -59,6 +59,18 @@
 					height: "400px",
 					library: {interpolateNulls: true} %>
 
+	<h2>Normalized Optical Density Over Time</h2>
+	<%= line_chart @norm_od_data.map { |k,v|
+				{name: k, data: v}},
+					xtitle: "Hours Post Start", 
+					ytitle: "Optical Density @ A750",
+					discrete: true,
+					width: "1000px",
+					height: "400px",
+					library: {interpolateNulls: true} %>
+
+
+
 	<h2>pH Over Time</h2>
 	<%= line_chart @pH_data.map { |k,v|
 				{name: k, data: v}},
