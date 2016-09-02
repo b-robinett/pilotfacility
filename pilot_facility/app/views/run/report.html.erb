@@ -12,6 +12,7 @@
 	<p></p>
 	<h1>RUN REPORT: <%= @id_passed %></h1>
 	<p></p>
+	<p>Error Notes: <%= @status %></p>
 	<%= link_to "Download data as CSV", download_data_path(format: "csv", :result_runs => @id_passed) %>
 
 	<h2> Total CPC content (g/L/day) over time</h2>

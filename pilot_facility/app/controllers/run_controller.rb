@@ -172,6 +172,31 @@ class RunController < ApplicationController
   
   def report
     @id_passed = params[:run_id]
+    run_obj = Run.find(@id_passed)
+    status_integer = run_obj.Status
+
+    case status_integer
+    when 1
+      @status = "Carbon Dioxide Malfunction"
+    when 2
+      @status = "Lights Malfunction"
+    when 3
+      @status = "Tank Heater Malfunction"
+    when 4
+      @status = "Operator Error"
+    when 5
+      @status = "Leak in Reactor"
+    when 6
+      @status = "Large Aggregations in Culture"
+    when 7
+      @status = "Media Problem"
+    when 8
+      @status = "Culture Died of Unknown Causes"
+    when 9
+      @status = "pH Probes needed adjustment"
+    else
+      @status = "No errors or malfunctions noted"
+    end
 
     @od_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "Optical Density")
     @pH_data = Datapoint.where("Run_ID = ? and Var_Name = ?", params[:run_id], "pH Probe")
