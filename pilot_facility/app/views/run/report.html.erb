@@ -36,7 +36,7 @@
 	<h2>CPC Percentage (g/g) Over Time</h2>
 	<%= scatter_chart @cpc_data.pluck(:Hrs_Post_Start, :Var_Value), 
 											xtitle: "Hours Post Start", 
-											ytitle: "Dry Weight (g)",
+											ytitle: "Percent CPC (g CPC/g dry weight)",
 											width: "1000px",
 											height: "400px",
 											library: {trendlines: "0" } %>

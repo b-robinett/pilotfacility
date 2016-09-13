@@ -349,7 +349,8 @@ class RunController < ApplicationController
       if q == 0
         start_val = r
       end
-      normalized_hash[q] = ((r/start_val).to_f * 100).to_i
+      puts r 
+      normalized_hash[q] = ((r/start_val).to_f * 100)
     end
     
     return normalized_hash
