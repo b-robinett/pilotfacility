@@ -10,7 +10,7 @@
 <p></p>
 <%= form_tag({action: :confirm_pc}, multipart: true) do %>
   <p>Data File (from Spectrophotometer): <%= file_field_tag 'pc_data_file' %></p>
-  <p>Plate Layout (from template): <%= file_field_tag 'layout_file' %></p>
+  <p>Layout File (from template): <%= file_field_tag 'layout_file' %></p>
   <p>Submitter: <%= text_field_tag 'Submitter' %></p>
   <%= submit_tag 'Upload' %> 
 <% end %>

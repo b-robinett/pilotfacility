@@ -195,9 +195,6 @@ class DatapointController < ApplicationController
       date = name_arr[1]
       new_date = str_to_date(date)
       
-      
-      
-
       prot_val = ((w - intercept) / slope).round(4)
 
       $prot_hash_todb[index] = [run_id, prot_val, new_date]
@@ -208,36 +205,24 @@ class DatapointController < ApplicationController
 
   def tot_prot_todb
     submitter = params[:submitter]
-    @dp_id_list = []
+    dp_id_list = []
     @bad_data = {}
 
     $prot_hash_todb.each do |x,y|
       
       exc_path = "add_tot_protein"
       valid_date = false
-      hrs_post_start = hrs_post_start_convert(y[0],y[2],exc_path,valid_date)
+      results_array = hrs_post_start_convert(y[0],y[2],exc_path)
+      valid_date = results_array[1]
+      hrs_post_start = results_array[0]
 
       if valid_date
-        curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",y[0], "Total Protein").last
+        begin
+          @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], "Total Protein", y[2].to_datetime).last
+        rescue ActiveRecord::RecordNotFound
+        end
 
-        if curr_data
-          if curr_data.Time_Taken != y[2].to_datetime
-            new_data = Datapoint.new()
-            new_data.Run_ID = y[0]
-            new_data.Var_Name = "Total Protein"
-            new_data.Var_Metric = "mg/mL"
-            new_data.Var_Value = y[1].to_f
-            new_data.Submitter = submitter
-            new_data.Time_Taken = y[2].to_datetime
-            new_data.Hrs_Post_Start = hrs_post_start
-            new_data.save
-
-            dp_id = Datapoint.last.id
-            @dp_id_list.push(dp_id)
-          else
-            @bad_data[x] = y
-          end
-        else
+        if @curr_data.nil?
           new_data = Datapoint.new()
           new_data.Run_ID = y[0]
           new_data.Var_Name = "Total Protein"
@@ -249,10 +234,11 @@ class DatapointController < ApplicationController
           new_data.save
 
           dp_id = Datapoint.last.id
-          @dp_id_list.push(dp_id)
+          dp_id_list.push(dp_id)
+        else
+          @bad_data[x] = y
         end
       end
-
     end
 
     begin
@@ -268,30 +254,27 @@ class DatapointController < ApplicationController
   def confirm_pc
     @Submitter = params[:Submitter]
     pcfiledata = params[:pc_data_file].read
-    pc_row_data = pcfiledata.split("\n")
-    pc_edit_data = pc_row_data[2,3,5,8,10]
-    
+    pc_rows = pcfiledata.split("\n")
+    pc_edited = [pc_rows[2],pc_rows[3],pc_rows[5],pc_rows[8],pc_rows[10]]
+
     clean_arr = []
 
-    for i in pc_edit_data
-      clean_arr[i] = pc_edit_data.split(/\t/)
+    pc_edited.each do |i|
+      temp = i.split(/\t/)
+      clean_arr.push(temp)
     end
+    clean_arr = clean_arr.transpose
+    clean_arr = clean_arr.slice(2..-2)
 
     pc_data_hash = {}
     arr_to_hash(clean_arr, pc_data_hash)
 
-
-    layout_file = params[:plate_layout_file]
-    final_arr = []
-
-    CSV.foreach(layout_file.path) do |row|
-      if !row.nil?
-        for x in row
-          final_arr[row.index(x)].push(x)
-        end
-      end
-    end
-
+    layout_file = params[:layout_file]
+    
+    csv = CSV.read(layout_file.path) 
+    final_arr = csv.transpose
+    final_arr.delete_at(0)
+    
     layout_hash = {}
     arr_to_hash(final_arr, layout_hash)
 
@@ -300,43 +283,48 @@ class DatapointController < ApplicationController
     pdt_index = 0
 
     pc_data_hash.each do |k,v|
-      if layout_hash.has_key?(k)
-        dil_val = layout_hash[k][2]
-        run_id = layout_hash[k][0]
-        raw_time_taken = layout_hash[1]
+      if layout_hash.has_key?(k) && layout_hash[k][1]
+        dil_val = layout_hash[k][2].to_i
+        run_id = layout_hash[k][0].to_i
+        raw_time_taken = layout_hash[k][1]
         time_taken = str_to_date(raw_time_taken)
 
-        cpc_mgml = ((0.162 * (v[1]-v[3])) - (0.098 * (v[0]-v[2]))) / dil_val
-        apc_mgml = ((0.18 * (v[0]-v[2])) - (0.042 * (v[1]-v[3]))) / dil_val
+        cpc_mgml = ((0.162 * (v[1].to_f-v[3].to_f)) - (0.098 * (v[0].to_f-v[2].to_f))) * dil_val
+        apc_mgml = ((0.18 * (v[0].to_f-v[2].to_f)) - (0.042 * (v[1].to_f-v[3].to_f))) * dil_val
         
         begin
-          afdw = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Dry Weight", time_taken)
+          afdw = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Dry Weight", time_taken).last
         rescue ActiveRecord::RecordNotFound
           error_hash[k] = "Dry Weight Not Found"
         end
         
+        afdw_data = afdw.Var_Value
+
         begin
-          optical_density = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Optical Density", time_taken)
+          optical_density = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Optical Density", time_taken).last
         rescue ActiveRecord::RecordNotFound
           if error_hash.has_key?(k)
             error_hash[k] = "Dry Weight and Optical Density Not Found"
           else
             error_hash[k] = "Optical Density Not Found"
+          end
         end
+
+        optical_density_data = optical_density.Var_Value
 
         odml_vol = 0
 
         if layout_hash[k][4]
-          odml_vol = layout_hash[k][4]
+          odml_vol = layout_hash[k][4].to_i
         else
-          odml_vol = 2 / optical_density
+          odml_vol = 2 / optical_density_data
         end
 
-        dw_in_sample = odml_vol * afdw
-        mg_cpc_in_sample = layout_hash[k][3] * cpc_mgml / 1000
-        mg_apc_in_sample = layout_hash[k][3] * apc_mgml / 1000
-        percent_cpc = mg_cpc_in_sample / dw_in_sample * 100
-        percent_apc = mg_apc_in_sample / dw_in_sample * 100
+        dw_in_sample = odml_vol * afdw_data
+        mg_cpc_in_sample = (layout_hash[k][3].to_i * cpc_mgml / 1000)
+        mg_apc_in_sample = (layout_hash[k][3].to_i * apc_mgml / 1000)
+        percent_cpc = (mg_cpc_in_sample / dw_in_sample * 100).round(4)
+        percent_apc = (mg_apc_in_sample / dw_in_sample * 100).round(4)
 
         $pc_data_todb[pdt_index] = [run_id, time_taken, "CPC", percent_cpc]
         $pc_data_todb[pdt_index + 1] = [run_id, time_taken, "APC", percent_apc]
@@ -348,42 +336,62 @@ class DatapointController < ApplicationController
 
   def pc_todb
     submitter = params[:submitter]
-    @dp_id_list = []
+    dp_id_list = []
     @bad_data = {}
 
     $pc_data_todb.each do |y|
       exc_path = "add_pc_data"
-      hrs_post_start = hrs_post_start_convert(y[0],y[1],exc_path,valid_date)
+      valid_date = false
+      results_array = hrs_post_start_convert(y[0],y[1],exc_path)
+      valid_date = results_array[1]
+      hrs_post_start = results_array[0]
 
       if valid_date
-        new_data = Datapoint.new()
-        new_data.Run_ID = y[0]
-        new_data.Var_Name = y[2]
-        new_data.Var_Metric = "Percent"
-        new_data.Var_Value = y[3].to_f
-        new_data.Submitter = submitter
-        new_data.Time_Taken = y[1].to_datetime
-        new_data.Hrs_Post_Start = hrs_post_start
-        new_data.save
+        begin
+          @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], y[2], y[1].to_datetime).last
+        rescue ActiveRecord::RecordNotFound
+        end
 
-        dp_id = Datapoint.last.id
-        @dp_id_list.push(dp_id)
-      else
-        @bad_data[y[0]] = [y[1],y[2],y[3]]
+        if @curr_data.nil?
+          new_data = Datapoint.new()
+          new_data.Run_ID = y[0]
+          new_data.Var_Name = y[2]
+          new_data.Var_Metric = "Percent"
+          new_data.Var_Value = y[3].to_f
+          new_data.Submitter = submitter
+          new_data.Time_Taken = y[1].to_datetime
+          new_data.Hrs_Post_Start = hrs_post_start
+          new_data.save
+
+          dp_id = Datapoint.last.id
+          dp_id_list.push(dp_id)
+        else
+          @bad_data[y[0]] = [y[1],y[2],y[3]]
+        end
       end
     end
+
+    begin
+      @dp_added = Datapoint.where(id: dp_id_list)
+    rescue ActiveRecord::RecordInvalid => @invalid
+    end
+
+    if @bad_data.empty? == false
+      @bad_data_error_msg = "ERROR: Data already present for timepoints given. See Below."
+    end
+
   end
 
   def arr_to_hash(inputarray, targetfile)
-    for i in inputarray
-      targetfile(i[0]) = i[1..-1]
+    inputarray.each do |i|
+      targetfile[i[0]] = i[1..-1]
     end
   end
 
   def str_to_date(datestring)
-    month = datestring[0..1].to_i
-    day = datestring[2..3].to_i
-    year = datestring[4..7].to_i
+    month = datestring[4..5].to_i
+    day = datestring[6..7].to_i
+    year = datestring[0..3].to_i
     
     if datestring.length > 8
       hour = datestring[8..9].to_i
@@ -396,7 +404,7 @@ class DatapointController < ApplicationController
     return new_date
   end
 
-  def hrs_post_start_convert(run_id,date,exc_path,valid_date)
+  def hrs_post_start_convert(run_id,date,exc_path)
     begin
       target_run = Run.find(run_id)
     rescue ActiveRecord::RecordNotFound
@@ -408,18 +416,19 @@ class DatapointController < ApplicationController
     end_day = target_run["Actual_end_date"].to_date
 
     hours = date.to_datetime.strftime("%H").to_i
-    hrs_post_start = (date.to_date - start_day).to_i) * 24 + hours
+    hrs_post_start = (((date.to_date - start_day).to_i) * 24) + hours
     
     if end_day.nil?
       end_day = Date.today
     end
     
-
     if (date.to_datetime >= start_day) && (date.to_datetime <= end_day)
       valid_date = true
     end
 
-    return hours_post_start
+    results_array = [hrs_post_start, valid_date]
+
+    return results_array
   end
 
 end

@@ -20,7 +20,6 @@
 	  	  <th>Protein mg/mL</th>
 	      <th>Date Taken</th>
 	    </tr>
-	  <% unless @bad_data.nil? %>
 	    <% @bad_data.each do |x,y|  %>       
 	      <tr>
 	        <td><%= x %></td>  
@@ -29,39 +28,38 @@
 	        <td><%= y[2] %></td> 
 	      </tr>
 	    <% end %>                        
-	    </table> 
-	  <% end %> 
+	   </table>  
 	</div>
 <% end %>
 
 
-<div align="center">
-<h1>Datapoints Added</h1>
-  <table>                         
-    <tr>                          
-      <th>Datapoint ID</th>
-      <th>Run ID</th>
-      <th>Submitter</th>
-      <th>Date Taken</th>
-      <th>Hours Past Start</th>
-      <th>Variable Name</th>
-      <th>Variable Metric</th>
-      <th>Variable Value</th>
-    </tr>
-  <% unless @dp_added.nil? %>
-    <% @dp_added.each do |x|  %>       
-      <tr>
-        <td><%= x[:id] %></td>  
-        <td><%= x[:Run_ID] %></td>  
-        <td><%= x[:Submitter] %></td>  
-        <td><%= x[:Time_Taken].to_date %></td> 
-        <td><%= x[:Hrs_Post_Start] %></td>
-        <td><%= x[:Var_Name] %></td> 
-        <td><%= x[:Var_Metric] %></td> 
-        <td><%= x[:Var_Value] %></td> 
+<% if @dp_added.empty? == false %>
+  <div align="center">
+  <h1>Datapoints Added</h1>
+    <table>                         
+      <tr>                          
+        <th>Datapoint ID</th>
+        <th>Run ID</th>
+        <th>Submitter</th>
+        <th>Date Taken</th>
+        <th>Hours Past Start</th>
+        <th>Variable Name</th>
+        <th>Variable Metric</th>
+        <th>Variable Value</th>
       </tr>
-    <% end %>                        
-    </table> 
-  <% end %> 
-</div>
+      <% @dp_added.each do |x|  %>       
+        <tr>
+          <td><%= x[:id] %></td>  
+          <td><%= x[:Run_ID] %></td>  
+          <td><%= x[:Submitter] %></td>  
+          <td><%= x[:Time_Taken].to_date %></td> 
+          <td><%= x[:Hrs_Post_Start] %></td>
+          <td><%= x[:Var_Name] %></td> 
+          <td><%= x[:Var_Metric] %></td> 
+          <td><%= x[:Var_Value] %></td> 
+        </tr>
+      <% end %>                        
+    </table>  
+  </div>
+<% end %>
 
