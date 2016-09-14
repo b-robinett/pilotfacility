@@ -1,4 +1,6 @@
 class Run < ActiveRecord::Base
+  validates :Scientist, :Actual_start_date, :Organism, :Strain_ID, :Reactor_Type, 
+  :Light_Intensity, :Light_Path, :Media, :Media_ID, :Air_Flow, :CO2_Flow, :presence => true
   
   def Reactor_Type
   end

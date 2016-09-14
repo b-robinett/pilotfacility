@@ -7,8 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 for i in 1..5
 	Run.create(Actual_start_date: '01/01/2016', Actual_end_date: '01/15/2016')
-	puts i
-	puts "is done"
 	for k in 1..5
 		Datapoint.create(Run_ID: i, 
 						Hrs_Post_Start: (k * 24), 

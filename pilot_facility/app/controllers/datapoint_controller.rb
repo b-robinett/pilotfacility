@@ -21,10 +21,6 @@ class DatapointController < ApplicationController
                       )
   end
   
-  def add_data
-    @datapoint = Datapoint.new()
-  end
-  
   def confirm_data_add
     @datapoint = Datapoint.new()
     
@@ -48,11 +44,6 @@ class DatapointController < ApplicationController
         @dp_err = true
       end
     end
-
-  end
-
-  def add_sample_set
-    @sample_set = Datapoint.new()
   end
 
   def confirm_sample_set
@@ -142,9 +133,6 @@ class DatapointController < ApplicationController
       @dp_err_arr[0] = "Date Taken does not fall within Run Schedule"
     end
   end
-  
-  def add_tot_protein
-  end
 
   def confirm_tot_protein
     @Submitter = params[:Submitter]
@@ -205,17 +193,9 @@ class DatapointController < ApplicationController
       name_arr = r.split("_")
       run_id = name_arr[0][1..-1].to_i
       date = name_arr[1]
-      month = date[0..1].to_i
-      day = date[2..3].to_i
-      year = date[4..7].to_i
+      new_date = str_to_date(date)
       
-      if date.length > 8
-        hour = date[8..9].to_i
-        minute = date[10..11].to_i
-        new_date = DateTime.new(year,month,day,hour,minute)
-      else
-        new_date = DateTime.new(year,month,day)
-      end
+      
       
 
       prot_val = ((w - intercept) / slope).round(4)
@@ -229,30 +209,16 @@ class DatapointController < ApplicationController
   def tot_prot_todb
     submitter = params[:submitter]
     @dp_id_list = []
+    @bad_data = {}
 
     $prot_hash_todb.each do |x,y|
-      begin
-        target_run = Run.find(y[0])
-      rescue ActiveRecord::RecordNotFound
-        flash[:notice] = "ERROR: No Run with id " + y[0].to_s
-        redirect_to :action => 'add_tot_protein'
-      end
-
-      start_day = target_run["Actual_start_date"].to_date
-      end_day = target_run["Actual_end_date"].to_date
       
-      if end_day.nil?
-        end_day = Date.today
-      end
-      
-      @bad_data = {}
+      exc_path = "add_tot_protein"
+      valid_date = false
+      hrs_post_start = hrs_post_start_convert(y[0],y[2],exc_path,valid_date)
 
-      if (y[2].to_datetime >= start_day) && (y[2].to_datetime <= end_day)
+      if valid_date
         curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Var_Value IS NOT NULL",y[0], "Total Protein").last
-
-        hours = y[2].to_datetime.strftime("%H").to_i
-        testdate = y[2].to_date - start_day
-        hrs_post_start = ((y[2].to_date - start_day).to_i) * 24 + hours
 
         if curr_data
           if curr_data.Time_Taken != y[2].to_datetime
@@ -285,7 +251,6 @@ class DatapointController < ApplicationController
           dp_id = Datapoint.last.id
           @dp_id_list.push(dp_id)
         end
-
       end
 
     end
@@ -298,6 +263,163 @@ class DatapointController < ApplicationController
     if @bad_data.empty? == false
       @bad_data_error_msg = "ERROR: Data already present for timepoints given. See Below."
     end
+  end
+
+  def confirm_pc
+    @Submitter = params[:Submitter]
+    pcfiledata = params[:pc_data_file].read
+    pc_row_data = pcfiledata.split("\n")
+    pc_edit_data = pc_row_data[2,3,5,8,10]
+    
+    clean_arr = []
+
+    for i in pc_edit_data
+      clean_arr[i] = pc_edit_data.split(/\t/)
+    end
+
+    pc_data_hash = {}
+    arr_to_hash(clean_arr, pc_data_hash)
+
+
+    layout_file = params[:plate_layout_file]
+    final_arr = []
+
+    CSV.foreach(layout_file.path) do |row|
+      if !row.nil?
+        for x in row
+          final_arr[row.index(x)].push(x)
+        end
+      end
+    end
+
+    layout_hash = {}
+    arr_to_hash(final_arr, layout_hash)
+
+    error_hash = {}
+    $pc_data_todb = []
+    pdt_index = 0
+
+    pc_data_hash.each do |k,v|
+      if layout_hash.has_key?(k)
+        dil_val = layout_hash[k][2]
+        run_id = layout_hash[k][0]
+        raw_time_taken = layout_hash[1]
+        time_taken = str_to_date(raw_time_taken)
+
+        cpc_mgml = ((0.162 * (v[1]-v[3])) - (0.098 * (v[0]-v[2]))) / dil_val
+        apc_mgml = ((0.18 * (v[0]-v[2])) - (0.042 * (v[1]-v[3]))) / dil_val
+        
+        begin
+          afdw = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Dry Weight", time_taken)
+        rescue ActiveRecord::RecordNotFound
+          error_hash[k] = "Dry Weight Not Found"
+        end
+        
+        begin
+          optical_density = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Optical Density", time_taken)
+        rescue ActiveRecord::RecordNotFound
+          if error_hash.has_key?(k)
+            error_hash[k] = "Dry Weight and Optical Density Not Found"
+          else
+            error_hash[k] = "Optical Density Not Found"
+        end
+
+        odml_vol = 0
+
+        if layout_hash[k][4]
+          odml_vol = layout_hash[k][4]
+        else
+          odml_vol = 2 / optical_density
+        end
+
+        dw_in_sample = odml_vol * afdw
+        mg_cpc_in_sample = layout_hash[k][3] * cpc_mgml / 1000
+        mg_apc_in_sample = layout_hash[k][3] * apc_mgml / 1000
+        percent_cpc = mg_cpc_in_sample / dw_in_sample * 100
+        percent_apc = mg_apc_in_sample / dw_in_sample * 100
+
+        $pc_data_todb[pdt_index] = [run_id, time_taken, "CPC", percent_cpc]
+        $pc_data_todb[pdt_index + 1] = [run_id, time_taken, "APC", percent_apc]
+
+        pdt_index =+ 2
+      end
+    end
+  end
+
+  def pc_todb
+    submitter = params[:submitter]
+    @dp_id_list = []
+    @bad_data = {}
+
+    $pc_data_todb.each do |y|
+      exc_path = "add_pc_data"
+      hrs_post_start = hrs_post_start_convert(y[0],y[1],exc_path,valid_date)
+
+      if valid_date
+        new_data = Datapoint.new()
+        new_data.Run_ID = y[0]
+        new_data.Var_Name = y[2]
+        new_data.Var_Metric = "Percent"
+        new_data.Var_Value = y[3].to_f
+        new_data.Submitter = submitter
+        new_data.Time_Taken = y[1].to_datetime
+        new_data.Hrs_Post_Start = hrs_post_start
+        new_data.save
+
+        dp_id = Datapoint.last.id
+        @dp_id_list.push(dp_id)
+      else
+        @bad_data[y[0]] = [y[1],y[2],y[3]]
+      end
+    end
+  end
+
+  def arr_to_hash(inputarray, targetfile)
+    for i in inputarray
+      targetfile(i[0]) = i[1..-1]
+    end
+  end
+
+  def str_to_date(datestring)
+    month = datestring[0..1].to_i
+    day = datestring[2..3].to_i
+    year = datestring[4..7].to_i
+    
+    if datestring.length > 8
+      hour = datestring[8..9].to_i
+      minute = datestring[10..11].to_i
+      new_date = DateTime.new(year,month,day,hour,minute)
+    else
+      new_date = DateTime.new(year,month,day)
+    end
+
+    return new_date
+  end
+
+  def hrs_post_start_convert(run_id,date,exc_path,valid_date)
+    begin
+      target_run = Run.find(run_id)
+    rescue ActiveRecord::RecordNotFound
+      flash[:notice] = "ERROR: No Run with id " + run_id.to_s
+      redirect_to :action => exc_path
+    end
+
+    start_day = target_run["Actual_start_date"].to_date
+    end_day = target_run["Actual_end_date"].to_date
+
+    hours = date.to_datetime.strftime("%H").to_i
+    hrs_post_start = (date.to_date - start_day).to_i) * 24 + hours
+    
+    if end_day.nil?
+      end_day = Date.today
+    end
+    
+
+    if (date.to_datetime >= start_day) && (date.to_datetime <= end_day)
+      valid_date = true
+    end
+
+    return hours_post_start
   end
 
 end

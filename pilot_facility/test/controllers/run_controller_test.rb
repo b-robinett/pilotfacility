@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class RunControllerTest < ActionController::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+   
+   test "add run without any information" do
+     test_run = Run.new()
+     assert_not test_run.save, "Saved run without any information"
+  end
+
 end

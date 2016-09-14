@@ -24,4 +24,7 @@ Rails.application.routes.draw do
   get 'add_tot_protein' => 'datapoint#add_tot_protein'
   post 'add_tot_protein' => 'datapoint#confirm_tot_protein'
   get 'tot_prot_todb' => 'datapoint#tot_prot_todb'
+  get 'add_pc' => 'datapoint#add_pc'
+  post 'add_pc' => 'datapoint#confirm_pc'
+  get 'pc_todb' => 'datapoint#pc_todb'
 end

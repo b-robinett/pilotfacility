@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+<div align="center">
+
+	<h2> Values to be entered into Database</h2>
+	  <table>                         
+	    <tr>                          
+	      <th>Index</th>
+	      <th>ID</th>
+	      <th>percent CPC</th>
+	      <th>percent APC
+	      <th>Sample Date</th>
+	    </tr>
+	  <% $pc_data_todb.each do |k| %>       
+	    <tr>
+	      <td><%= $pc_data_todb.index(k) %></td> 
+	      <td><%= k[0] %></td>  
+	      <td><%= k[1] %></td>
+	      <td><%= k[2] %></td>
+	      <td><%= k[3] %></td>
+	    </tr>
+	  <% end %>                        
+	  </table> 
+
+ 	<td><%= link_to("Submit Data", pc_todb_path(:submitter => @Submitter)) %></td>
+</div>

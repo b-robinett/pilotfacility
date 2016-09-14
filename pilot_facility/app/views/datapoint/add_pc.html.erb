@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div align="left">
+  <form> 
+    <button type="Submit" formaction="dashboard">Dashboard</button>
+  </form>
+</div>
+<p></p>
+<div class = "center"><h1>Add Phycocyanin Absorbance Data</h1></div>
+
+<p></p>
+<%= form_tag({action: :confirm_pc}, multipart: true) do %>
+  <p>Data File (from Spectrophotometer): <%= file_field_tag 'pc_data_file' %></p>
+  <p>Plate Layout (from template): <%= file_field_tag 'layout_file' %></p>
+  <p>Submitter: <%= text_field_tag 'Submitter' %></p>
+  <%= submit_tag 'Upload' %> 
+<% end %>
+<p></p>
