@@ -62,9 +62,10 @@ class DatapointController < ApplicationController
     end
 
     start_day = target_run["Actual_start_date"].to_date
-    end_day = target_run["Actual_end_date"].to_date
-    if end_day.nil?
-      end_day = Date.today
+    end_day = Date.today
+
+    if target_run["Actual_end_date"]
+      end_day = target_run["Actual_end_date"].to_date
     end
 
     @dp_id_list = Array.new()
@@ -278,7 +279,7 @@ class DatapointController < ApplicationController
     layout_hash = {}
     arr_to_hash(final_arr, layout_hash)
 
-    error_hash = {}
+    @error_hash = {}
     $pc_data_todb = []
     pdt_index = 0
 
@@ -295,41 +296,42 @@ class DatapointController < ApplicationController
         begin
           afdw = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Dry Weight", time_taken).last
         rescue ActiveRecord::RecordNotFound
-          error_hash[k] = "Dry Weight Not Found"
+          @error_hash[k] = "Dry Weight Not Found"
         end
-        
-        afdw_data = afdw.Var_Value
 
         begin
           optical_density = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",run_id, "Optical Density", time_taken).last
         rescue ActiveRecord::RecordNotFound
           if error_hash.has_key?(k)
-            error_hash[k] = "Dry Weight and Optical Density Not Found"
+            @error_hash[k] = "Dry Weight and Optical Density Not Found"
           else
-            error_hash[k] = "Optical Density Not Found"
+            @error_hash[k] = "Optical Density Not Found"
           end
         end
 
-        optical_density_data = optical_density.Var_Value
+        if afdw && optical_density
+          afdw_data = afdw.Var_Value
+          optical_density_data = optical_density.Var_Value
 
-        odml_vol = 0
+          odml_vol = 0
 
-        if layout_hash[k][4]
-          odml_vol = layout_hash[k][4].to_i
-        else
-          odml_vol = 2 / optical_density_data
+          if layout_hash[k][4]
+            odml_vol = layout_hash[k][4].to_i
+          else
+            odml_vol = 2 / optical_density_data
+          end
+
+          dw_in_sample = odml_vol * afdw_data
+          mg_cpc_in_sample = (layout_hash[k][3].to_i * cpc_mgml / 1000)
+          mg_apc_in_sample = (layout_hash[k][3].to_i * apc_mgml / 1000)
+          percent_cpc = (mg_cpc_in_sample / dw_in_sample * 100).round(4)
+          percent_apc = (mg_apc_in_sample / dw_in_sample * 100).round(4)
+
+          $pc_data_todb[pdt_index] = [run_id, time_taken, "CPC", percent_cpc]
+          $pc_data_todb[pdt_index + 1] = [run_id, time_taken, "APC", percent_apc]
+
+          pdt_index += 2
         end
-
-        dw_in_sample = odml_vol * afdw_data
-        mg_cpc_in_sample = (layout_hash[k][3].to_i * cpc_mgml / 1000)
-        mg_apc_in_sample = (layout_hash[k][3].to_i * apc_mgml / 1000)
-        percent_cpc = (mg_cpc_in_sample / dw_in_sample * 100).round(4)
-        percent_apc = (mg_apc_in_sample / dw_in_sample * 100).round(4)
-
-        $pc_data_todb[pdt_index] = [run_id, time_taken, "CPC", percent_cpc]
-        $pc_data_todb[pdt_index + 1] = [run_id, time_taken, "APC", percent_apc]
-
-        pdt_index =+ 2
       end
     end
   end
@@ -338,6 +340,7 @@ class DatapointController < ApplicationController
     submitter = params[:submitter]
     dp_id_list = []
     @bad_data = {}
+    index = 0
 
     $pc_data_todb.each do |y|
       exc_path = "add_pc_data"
@@ -366,9 +369,11 @@ class DatapointController < ApplicationController
           dp_id = Datapoint.last.id
           dp_id_list.push(dp_id)
         else
-          @bad_data[y[0]] = [y[1],y[2],y[3]]
+          @bad_data[index] = [y[0],y[1],y[2],y[3]]
         end
       end
+
+      index += 1
     end
 
     begin
@@ -413,14 +418,15 @@ class DatapointController < ApplicationController
     end
 
     start_day = target_run["Actual_start_date"].to_date
-    end_day = target_run["Actual_end_date"].to_date
+    
+    if target_run["Actual_end_date"]
+      end_day = target_run["Actual_end_date"].to_date
+    else
+      end_day = Date.today
+    end
 
     hours = date.to_datetime.strftime("%H").to_i
     hrs_post_start = (((date.to_date - start_day).to_i) * 24) + hours
-    
-    if end_day.nil?
-      end_day = Date.today
-    end
     
     if (date.to_datetime >= start_day) && (date.to_datetime <= end_day)
       valid_date = true

@@ -27,7 +27,7 @@
 					library: {interpolateNulls: true}  %>
 	<p></p>
 
-	<h2>CPC Percentage (g/g)Over Time</h2>
+	<h2>CPC Percentage (g/g) Over Time</h2>
 	<%= line_chart @cpc_data.map { |k,v|
 				{name: k, data: v}},
 					xtitle: "Hours Post Start", 
@@ -42,7 +42,7 @@
 	<%= line_chart @dw_data.map { |k,v|
 				{name: k, data: v}},
 					xtitle: "Hours Post Start", 
-					ytitle: "Dry Weight (g)",
+					ytitle: "Dry Weight (g/L)",
 					discrete: true,
 					width: "1000px",
 					height: "400px",

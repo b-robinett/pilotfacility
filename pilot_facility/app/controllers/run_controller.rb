@@ -308,7 +308,7 @@ class RunController < ApplicationController
       
       v.each do |q,r|
         if @cpc_data[k].key?(q)
-          temp_hash[q] = (@cpc_data[k][q]/100 * r)
+          temp_hash[q] = ((@cpc_data[k][q]/100 * r) / (q / 24))
         end
       end
 
@@ -361,7 +361,7 @@ class RunController < ApplicationController
 
     dw_data.each do |k,v|
       if pc_data.key?(k)
-        pc_per_dw[k] = ((pc_data[k]/100) * v)
+        pc_per_dw[k] = (((pc_data[k]/100) * v) / (k / 24))
       end
     end
 

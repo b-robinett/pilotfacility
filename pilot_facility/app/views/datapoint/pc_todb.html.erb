@@ -6,26 +6,23 @@
 </div>
 <p></p>
 
-<% if @bad_data_error_msg %>
-  <div align="center" class="notice"><%= @bad_data_error_msg %></div>
-<% end %>
 
 <% if @bad_data.empty? == false %>
   <div align="center">
 	<h1>Data NOT Added</h1>
 	  <table>                         
 	    <tr>                          
-	      <th>Run ID</th>
+        <th>Run ID</th>
         <th>Date</th>
-        <th>Protein Type</th>
-        <th>Value</th>
+        <th>Variable Name</th>
+        <th>Variable Value</th>
 	    </tr>
 	    <% @bad_data.each do |x,y|  %>       
 	      <tr>
-	        <td><%= x %></td>  
 	        <td><%= y[0] %></td>  
-	        <td><%= y[1] %></td> 
-	        <td><%= y[2] %></td> 
+	        <td><%= y[1] %></td>  
+          <td><%= y[2] %></td> 
+          <td><%= y[3] %></td> 
 	      </tr>
 	    <% end %>                        
 	   </table> 
