@@ -14,13 +14,15 @@
       <%= form_for @datapoint, url: {action: "add_data"} do |f| %>
         
         <p><%= f.label :Run_ID, "Run ID" %>
-        <%= f.number_field :Run_ID, class: 'form-control' %></p>
+        <%= f.number_field :Run_ID, class: 'form-control', :required => true %></p>
         
         <p><%= f.label :Submitter, "Submitter" %>
-        <%= f.text_field :Submitter, class: 'form-control' %></p>
+        <%= f.text_field :Submitter, class: 'form-control', :required => true %></p>
         
         <p><%= f.label :Time_Taken, "Date Data Collected" %>
-        <%= f.date_field :Time_Taken, class: 'form-control' %></p>
+        <%= f.text_field :Time_Taken, class: 'form-control', :required => true %></p>
+
+        <p>Time Taken (Hour of Day, eg. 13 for 1pm): <%= number_field_tag 'Hour_Taken', nil, :step => 0.5%></p>
         
         <p><%= f.label :Hrs_Post_Start, "Hours Post Run Start" %>
         <%= f.number_field :Hrs_Post_Start, class: 'form-control', :in => 0..500 %></p>

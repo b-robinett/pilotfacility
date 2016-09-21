@@ -14,26 +14,26 @@
       
       <%= form_for @run, url: {action: "add_run"} do |f| %>
         <p><b>SELECT CONDITIONS SET</b></p>
-        <%= select_tag 'Condition', options_for_select([ "Standard Seed Train", "Standard Flask", "Specific"]) %>
+        <%= select_tag 'Condition', options_for_select([ "Standard Seed Train", "Standard Flask", "Specific"]), :required =>true %>
 
         <p><b>NECESSARY INFORMATION</b></p>
         <p><%= f.label :Scientist, "Requesting Scientist" %>
-        <%= f.text_field :Scientist, class: 'form-control' %></p>
+        <%= f.text_field :Scientist, class: 'form-control', :required =>true %></p>
         
         <p><%= f.label :Actual_start_date, "Start Date" %>
-        <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
+        <%= f.text_field :Actual_start_date, class: 'form-control', :value=> "MM/DD/YYYY", :required =>true %></p>
 
         <p><%= f.label :Reactor_ID, "Reactor ID" %>
         <%= f.number_field :Reactor_ID, class: 'form-control', :max => 50 %></p>
 
         <p><%= f.label :Reactor_Type, "Reactor Type" %>
-        <%= f.select :Reactor_Type, [['10L Carboy'],['10L Glass Reactor'],['20L Carboy'],['20L Glass Reactor'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']]%></p>
+        <%= f.select :Reactor_Type, [['10L Carboy'],['10L Glass Reactor'],['20L Carboy'],['20L Glass Reactor'],['10L Flat Panel'],['50L Round'],['Raceway'],['Flask']], :required =>true %></p>
 
         <p><%= f.label :Organism, "Select organism" %>
-        <%= f.select :Organism, [['Arthrospira - NIES39'],['Arthrospira - Utex'],['Aponinum'],['Synechococcus 7942']]%></p>
+        <%= f.select :Organism, [['Arthrospira - NIES39'],['Arthrospira - Utex'],['Aponinum'],['Synechococcus 7942']], :required =>true %></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
-        <%= f.text_field :Strain_ID, class: 'form-control' %></p>
+        <%= f.text_field :Strain_ID, class: 'form-control', :required =>true %></p>
 
         <p><%= f.label :Parent_Run, "Parent Run ID" %>
         <%= f.number_field :Parent_Run, class: 'form-control', :max => 1000 %></p>
@@ -81,7 +81,7 @@
 
         <p><b>ONLY FILL IF RUN COMPLETED</b></p>
         <p><%= f.label :Actual_end_date, "End Date" %>
-        <%= f.date_field :Actual_end_date, class: 'form-control' %></p>
+        <%= f.text_field :Actual_end_date, class: 'form-control', :value=> "MM/DD/YYYY" %></p>
         
         <%= f.submit "Submit Run for Approval", class: "btn btn-primary" %>
       <% end %>

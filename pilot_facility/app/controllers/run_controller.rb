@@ -6,14 +6,13 @@ class RunController < ApplicationController
     @current.each do |p|
       create_dict(p,@master_dict)
     end
+    final_run = Run.last
+    @final_run_id = final_run.id
   end
 
   def create_dict(record,target_dict)
     mini_dict = Hash.new
     last_OD_rec = Datapoint.where("Run_ID = ? and Var_Name = ?", record[:id], "Optical Density").last()
-
-    puts "here"
-    puts last_OD_rec
 
     
     if last_OD_rec
@@ -45,15 +44,18 @@ class RunController < ApplicationController
   
   def confirm_run_add
     @run = Run.new
-    
+
+    actual_start_date = text_to_date(params[:run][:Actual_start_date])
+    actual_end_date = text_to_date(params[:run][:Actual_end_date])
+
     @run.Scientist = params[:run][:Scientist].downcase
-    @run.Actual_start_date = params[:run][:Actual_start_date]
+    @run.Actual_start_date = actual_start_date
     @run.Reactor_ID = params[:run][:Reactor_ID]
     @run.Reactor_Type = params[:run][:Reactor_Type]
     @run.Organism = params[:run][:Organism]
     @run.Strain_ID = params[:run][:Strain_ID]
     @run.Parent_Run = params[:run][:Parent_Run]
-    @run.Actual_end_date = params[:run][:Actual_end_date]
+    @run.Actual_end_date = actual_end_date
 
     if params[:Condition] == 'Specific'
       @run.Media = params[:run][:Media]
@@ -366,6 +368,13 @@ class RunController < ApplicationController
     end
 
     return pc_per_dw
+  end
+
+  def text_to_date(date_string)
+    date_array = date_string.split("/")
+    date_array.map!(&:to_i)
+    fin_date = DateTime.new(date_array[2],date_array[0],date_array[1])
+    return fin_date
   end
 
 end
