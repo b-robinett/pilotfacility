@@ -46,7 +46,12 @@ class RunController < ApplicationController
     @run = Run.new
 
     actual_start_date = text_to_date(params[:run][:Actual_start_date])
-    actual_end_date = text_to_date(params[:run][:Actual_end_date])
+    
+    if params[:run][:Actual_end_date] != ""
+      actual_end_date = text_to_date(params[:run][:Actual_end_date])
+    else
+      actual_end_date = ""
+    end
 
     @run.Scientist = params[:run][:Scientist].downcase
     @run.Actual_start_date = actual_start_date
@@ -326,10 +331,8 @@ class RunController < ApplicationController
     end
 
     lowest_val = run_id_array.min
-    puts lowest_val
     @norm_od_data.delete(lowest_val)
     check = @norm_od_data.has_key?(lowest_val)
-    puts check
   end
 
   def obj_hash_convert(incoming_obj)

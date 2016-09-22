@@ -91,7 +91,7 @@ class DatapointController < ApplicationController
             sample_set = Datapoint.new()
 
             sample_set.Run_ID = params[:Run_ID]
-            sample_set.Submitter = params[:Submitter]
+            sample_set.Submitter = params[:Submitter].downcase
             sample_set.Time_Taken = time_taken
             sample_set.Hrs_Post_Start = hrs_post_start
             sample_set.Var_Name = var_Name_Arr[i]
@@ -120,7 +120,7 @@ class DatapointController < ApplicationController
   end
 
   def confirm_tot_protein
-    @Submitter = params[:Submitter]
+    @Submitter = params[:Submitter].downcase
     @filecontent = params[:tp_data_file].read
     @data_arr = @filecontent.split(' ')
     @data_arr = @data_arr[33..128]
@@ -189,7 +189,7 @@ class DatapointController < ApplicationController
   end
 
   def tot_prot_todb
-    submitter = params[:submitter]
+    submitter = params[:submitter].downcase
     dp_id_list = []
     @bad_data = {}
 
@@ -237,7 +237,7 @@ class DatapointController < ApplicationController
   end
 
   def confirm_pc
-    @Submitter = params[:Submitter]
+    @Submitter = params[:Submitter].downcase
     pcfiledata = params[:pc_data_file].read
     pc_rows = pcfiledata.split("\n")
     pc_edited = [pc_rows[2],pc_rows[3],pc_rows[5],pc_rows[8],pc_rows[10]]
@@ -321,7 +321,7 @@ class DatapointController < ApplicationController
   end
 
   def pc_todb
-    submitter = params[:submitter]
+    submitter = params[:submitter].downcase
     dp_id_list = []
     @bad_data = {}
     index = 0
