@@ -46,64 +46,75 @@ class RunController < ApplicationController
     @run = Run.new
 
     actual_start_date = text_to_date(params[:run][:Actual_start_date])
+
+    if actual_start_date != false
     
-    if params[:run][:Actual_end_date] != ""
-      actual_end_date = text_to_date(params[:run][:Actual_end_date])
+      if params[:run][:Actual_end_date] == "" or params[:run][:Actual_end_date] == "MM/DD/YYYY"
+        actual_end_date = ""
+      else
+        actual_end_date = text_to_date(params[:run][:Actual_end_date])
+      end
+
+      if actual_end_date != false
+        @run.Scientist = params[:run][:Scientist].downcase
+        @run.Actual_start_date = actual_start_date
+        @run.Reactor_ID = params[:run][:Reactor_ID]
+        @run.Reactor_Type = params[:run][:Reactor_Type]
+        @run.Organism = params[:run][:Organism]
+        @run.Strain_ID = params[:run][:Strain_ID]
+        @run.Parent_Run = params[:run][:Parent_Run]
+        @run.Actual_end_date = actual_end_date
+
+        if params[:Condition] == 'Specific'
+          @run.Media = params[:run][:Media]
+          @run.pH = params[:run][:pH]
+          @run.Start_OD = params[:run][:Start_OD]
+          @run.Light_Intensity = params[:run][:Light_Intensity]
+          @run.Lightnotes = params[:run][:Lightnotes].downcase
+          @run.Light_Path = params[:run][:Light_Path]
+          @run.Temperature = params[:run][:Temperature]
+          @run.Air_Flow = params[:run][:Air_Flow]
+          @run.CO2_Flow = params[:run][:CO2_Flow]
+          @run.Day_Harvested = params[:run][:Day_Harvested]
+          @run.Reactor_Pos = params[:run][:Reactor_Pos]
+          @run.Media_ID = params[:run][:Media_ID]
+          @run.Reactor_vol = params[:run][:Reactor_vol]
+        elsif params[:Condition] == 'Standard Seed Train'
+          @run.Media = '1X SOT'
+          @run.pH = 9.5
+          @run.Start_OD = 0.1
+          @run.Light_Intensity = 200
+          @run.Lightnotes = 'white'
+          @run.Light_Path = 13.5
+          @run.Temperature = 30
+          @run.Air_Flow = 3
+          @run.CO2_Flow = 0.3
+          @run.Reactor_Pos = params[:run][:Reactor_Pos]
+          @run.Media_ID = params[:run][:Media_ID]
+          @run.Reactor_vol = 10
+        elsif params[:Condition] == 'Standard Flask'
+          @run.Media = '1X SOT'
+          @run.pH = 9.8
+          @run.Start_OD = 0.25
+          @run.Light_Intensity = 120
+          @run.Lightnotes = 'white'
+          @run.Light_Path = 2
+          @run.Temperature = 30
+          @run.Media_ID = params[:run][:Media_ID]
+          @run.Reactor_vol = 0.1
+        end
+
+        @run.save!
+        @record = Run.last
+      else
+      flash[:notice] = "ERROR: End Date must be entered as MM/DD/YYYY"
+      render "add_run"
+      end
+
     else
-      actual_end_date = ""
+      flash[:notice] = "ERROR: Start Date must be entered as MM/DD/YYYY"
+      render "add_run"
     end
-
-    @run.Scientist = params[:run][:Scientist].downcase
-    @run.Actual_start_date = actual_start_date
-    @run.Reactor_ID = params[:run][:Reactor_ID]
-    @run.Reactor_Type = params[:run][:Reactor_Type]
-    @run.Organism = params[:run][:Organism]
-    @run.Strain_ID = params[:run][:Strain_ID]
-    @run.Parent_Run = params[:run][:Parent_Run]
-    @run.Actual_end_date = actual_end_date
-
-    if params[:Condition] == 'Specific'
-      @run.Media = params[:run][:Media]
-      @run.pH = params[:run][:pH]
-      @run.Start_OD = params[:run][:Start_OD]
-      @run.Light_Intensity = params[:run][:Light_Intensity]
-      @run.Lightnotes = params[:run][:Lightnotes].downcase
-      @run.Light_Path = params[:run][:Light_Path]
-      @run.Temperature = params[:run][:Temperature]
-      @run.Air_Flow = params[:run][:Air_Flow]
-      @run.CO2_Flow = params[:run][:CO2_Flow]
-      @run.Day_Harvested = params[:run][:Day_Harvested]
-      @run.Reactor_Pos = params[:run][:Reactor_Pos]
-      @run.Media_ID = params[:run][:Media_ID]
-      @run.Reactor_vol = params[:run][:Reactor_vol]
-    elsif params[:Condition] == 'Standard Seed Train'
-      @run.Media = '1X SOT'
-      @run.pH = 9.5
-      @run.Start_OD = 0.1
-      @run.Light_Intensity = 200
-      @run.Lightnotes = 'white'
-      @run.Light_Path = 13.5
-      @run.Temperature = 30
-      @run.Air_Flow = 3
-      @run.CO2_Flow = 0.3
-      @run.Reactor_Pos = params[:run][:Reactor_Pos]
-      @run.Media_ID = params[:run][:Media_ID]
-      @run.Reactor_vol = 10
-    elsif params[:Condition] == 'Standard Flask'
-      @run.Media = '1X SOT'
-      @run.pH = 9.8
-      @run.Start_OD = 0.25
-      @run.Light_Intensity = 120
-      @run.Lightnotes = 'white'
-      @run.Light_Path = 2
-      @run.Temperature = 30
-      @run.Media_ID = params[:run][:Media_ID]
-      @run.Reactor_vol = 0.1
-    end
-
-    @run.save!
-    
-    @record = Run.last
     
   end
 
@@ -115,29 +126,53 @@ class RunController < ApplicationController
   end
   
   def confirm_run_update
-    @new_target = Run.find(params[:run][:id])
-    @new_target.update(:Scientist => params[:run][:Scientist],
-                      :Reactor_Type => params[:run][:Reactor_Type],
-                      :Media => params[:run][:Media],
-                      :pH => params[:run][:pH],
-                      :Start_OD => params[:run][:Start_OD],
-                      :Light_Intensity => params[:run][:Light_Intensity],
-                      :Lightnotes => params[:run][:Lightnotes],
-                      :Light_Path => params[:run][:Light_Path],
-                      :Temperature => params[:run][:Temperature],
-                      :Organism => params[:run][:Organism],
-                      :Strain_ID => params[:run][:Strain_ID],
-                      :Actual_start_date => params[:run][:Actual_start_date],
-                      :Actual_end_date => params[:run][:Actual_end_date],
-                      :Reactor_ID => params[:run][:Reactor_ID],
-                      :Reactor_Pos => params[:run][:Reactor_Pos],
-                      :Day_Harvested => params[:run][:Day_Harvested],
-                      :Media_ID => params[:run][:Media_ID],
-                      :Parent_Run => params[:run][:Parent_Run],
-                      :Reactor_vol => params[:run][:Reactor_vol],
-                      :Air_Flow => params[:run][:Air_Flow],
-                      :CO2_Flow => params[:run][:CO2_Flow]
-                      )
+    curr_run = params[:run][:id]
+
+    actual_start_date = text_to_date(params[:run][:Actual_start_date])
+
+    if actual_start_date != false
+    
+      if params[:run][:Actual_end_date] == "" or params[:run][:Actual_end_date] == "MM/DD/YYYY"
+        actual_end_date = ""
+      else
+        actual_end_date = text_to_date(params[:run][:Actual_end_date])
+      end
+
+      if actual_end_date != false
+        @new_target = Run.find(params[:run][:id])
+        @new_target.update(:Scientist => params[:run][:Scientist],
+                          :Reactor_Type => params[:run][:Reactor_Type],
+                          :Media => params[:run][:Media],
+                          :pH => params[:run][:pH],
+                          :Start_OD => params[:run][:Start_OD],
+                          :Light_Intensity => params[:run][:Light_Intensity],
+                          :Lightnotes => params[:run][:Lightnotes],
+                          :Light_Path => params[:run][:Light_Path],
+                          :Temperature => params[:run][:Temperature],
+                          :Organism => params[:run][:Organism],
+                          :Strain_ID => params[:run][:Strain_ID],
+                          :Actual_start_date => params[:run][:Actual_start_date],
+                          :Actual_end_date => params[:run][:Actual_end_date],
+                          :Reactor_ID => params[:run][:Reactor_ID],
+                          :Reactor_Pos => params[:run][:Reactor_Pos],
+                          :Day_Harvested => params[:run][:Day_Harvested],
+                          :Media_ID => params[:run][:Media_ID],
+                          :Parent_Run => params[:run][:Parent_Run],
+                          :Reactor_vol => params[:run][:Reactor_vol],
+                          :Air_Flow => params[:run][:Air_Flow],
+                          :CO2_Flow => params[:run][:CO2_Flow]
+                          )
+      else
+      flash[:notice] = "ERROR: End Date must be entered as MM/DD/YYYY"
+      @target = Run.find(curr_run)
+      render :update_run
+      end
+
+    else
+      flash[:notice] = "ERROR: Start Date must be entered as MM/DD/YYYY"
+      @target = Run.find(curr_run)
+      render :update_run
+    end
   end
   
   def search
@@ -374,10 +409,16 @@ class RunController < ApplicationController
   end
 
   def text_to_date(date_string)
-    date_array = date_string.split("/")
-    date_array.map!(&:to_i)
-    fin_date = DateTime.new(date_array[2],date_array[0],date_array[1])
-    return fin_date
+    valid_datetype = date_string.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+
+    if valid_datetype
+      date_array = date_string.split("/")
+      date_array.map!(&:to_i)
+      fin_date = DateTime.new(date_array[2],date_array[0],date_array[1])
+      return fin_date
+    else
+      return false
+    end
   end
 
 end

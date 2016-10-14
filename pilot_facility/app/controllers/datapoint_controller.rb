@@ -29,93 +29,108 @@ class DatapointController < ApplicationController
     @datapoint = Datapoint.new()
     time_taken = datetime_convert(params[:datapoint][:Time_Taken],params[:datapoint][:Hour_Taken])
     
-    results_array = hrs_post_start_convert(params[:datapoint][:Run_ID],time_taken,"add_data")
-    valid_date = results_array[1]
-    hrs_post_start = results_array[0]
+    if time_taken != false
+      results_array = hrs_post_start_convert(params[:datapoint][:Run_ID],time_taken,"add_data")
+      valid_date = results_array[1]
+      hrs_post_start = results_array[0]
 
-    if valid_date
-      begin
-        curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",params[:datapoint][:Run_ID], params[:datapoint][:Var_Name], time_taken).last
-      rescue ActiveRecord::RecordNotFound
+      if valid_date
+        begin
+          curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",params[:datapoint][:Run_ID], params[:datapoint][:Var_Name], time_taken).last
+        rescue ActiveRecord::RecordNotFound
+        end
+              
+        if curr_data.nil?
+          @datapoint.Run_ID = params[:datapoint][:Run_ID]
+          @datapoint.Submitter = params[:datapoint][:Submitter].downcase
+          @datapoint.Time_Taken = time_taken
+          @datapoint.Hrs_Post_Start = params[:datapoint][:Hrs_Post_Start]
+          @datapoint.Var_Name = params[:datapoint][:Var_Name]
+          @datapoint.Var_Metric = params[:datapoint][:Var_Metric]
+          @datapoint.Var_Value = params[:datapoint][:Var_Value]
+          @datapoint.Notes = params[:datapoint][:Notes]
+          
+          @datapoint.save!
+          @dp_record = Datapoint.last
+        else
+          @dp_record = curr_data
+          @dp_err = true
+        end
       end
-            
-      if curr_data.nil?
-        @datapoint.Run_ID = params[:datapoint][:Run_ID]
-        @datapoint.Submitter = params[:datapoint][:Submitter].downcase
-        @datapoint.Time_Taken = time_taken
-        @datapoint.Hrs_Post_Start = params[:datapoint][:Hrs_Post_Start]
-        @datapoint.Var_Name = params[:datapoint][:Var_Name]
-        @datapoint.Var_Metric = params[:datapoint][:Var_Metric]
-        @datapoint.Var_Value = params[:datapoint][:Var_Value]
-        @datapoint.Notes = params[:datapoint][:Notes]
-        
-        @datapoint.save!
-        @dp_record = Datapoint.last
-      else
-        @dp_record = curr_data
-        @dp_err = true
-      end
+    else
+      flash[:notice] = "ERROR: Date must be entered as MM/DD/YYYY"
+        render "add_data"
     end
   end
 
   def confirm_sample_set
     
-    if params[:Dry_Weight_Post] != ""
-      dw_calc = ((params[:Dry_Weight_Post].to_f - params[:Dry_Weight_Pre].to_f)/(params[:DW_vol].to_f)).round(3)
-    else
-      dw_calc = ""
-    end
+    @valid_run = validate_run_id(params[:Run_ID])
 
-    time_taken = datetime_convert(params[:Time_Taken],params[:Hour_Taken])
-    results_array = hrs_post_start_convert(params[:Run_ID],time_taken,"add_sample_set")
-    valid_date = results_array[1]
-    hrs_post_start = results_array[0]
+    if @valid_run
 
-    @dp_id_list = Array.new()
-    @dp_err_arr = Array.new()
+      if params[:Dry_Weight_Post] != ""
+        dw_calc = ((params[:Dry_Weight_Post].to_f - params[:Dry_Weight_Pre].to_f)/(params[:DW_vol].to_f)).round(3)
+      else
+        dw_calc = ""
+      end
 
-    if valid_date
+      time_taken = datetime_convert(params[:Time_Taken],params[:Hour_Taken])
+      if time_taken != false
+        results_array = hrs_post_start_convert(params[:Run_ID],time_taken,"add_sample_set")
+        valid_date = results_array[1]
+        hrs_post_start = results_array[0]
 
-      var_Name_Arr = ["Optical Density","Dry Weight","pH Probe","pH Meter","BG11 Plate","LB Plate"]
-      var_Metric_Arr = ["A750","Milligram","pH","pH","CFU", "CFU"]
-      var_Value_Arr = [params[:OD], dw_calc, params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
+        @dp_id_list = Array.new()
+        @dp_err_arr = Array.new()
 
-      for i in 0..5 
-        if var_Value_Arr[i] != ""
+        if valid_date
+
+          var_Name_Arr = ["Optical Density","Dry Weight","pH Probe","pH Meter","BG11 Plate","LB Plate"]
+          var_Metric_Arr = ["A750","Milligram","pH","pH","CFU", "CFU"]
+          var_Value_Arr = [params[:OD], dw_calc, params[:pH_Probe], params[:pH_Meter], params[:BG], params[:LB]] 
+
+          for i in 0..5 
+            if var_Value_Arr[i] != ""
+              begin
+                curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken =?",params[:Run_ID], var_Name_Arr[i], time_taken).last
+              rescue ActiveRecord::RecordNotFound
+              end
+              
+              if curr_data.nil?
+                sample_set = Datapoint.new()
+
+                sample_set.Run_ID = params[:Run_ID]
+                sample_set.Submitter = params[:Submitter].downcase
+                sample_set.Time_Taken = time_taken
+                sample_set.Hrs_Post_Start = hrs_post_start
+                sample_set.Var_Name = var_Name_Arr[i]
+                sample_set.Var_Metric = var_Metric_Arr[i]
+                sample_set.Var_Value = var_Value_Arr[i]
+
+                sample_set.save
+                
+                dp_id = Datapoint.last.id
+                @dp_id_list.push(dp_id)
+
+              else
+                @dp_err_arr.push(var_Name_Arr[i])
+                puts @dp_err_arr
+              end
+            end
+          end
+
           begin
-            curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken =?",params[:Run_ID], var_Name_Arr[i], time_taken).last
-          rescue ActiveRecord::RecordNotFound
+            @dp_added = Datapoint.where(id: @dp_id_list)
+          rescue ActiveRecord::RecordInvalid => @invalid
           end
-          
-          if curr_data.nil?
-            sample_set = Datapoint.new()
-
-            sample_set.Run_ID = params[:Run_ID]
-            sample_set.Submitter = params[:Submitter].downcase
-            sample_set.Time_Taken = time_taken
-            sample_set.Hrs_Post_Start = hrs_post_start
-            sample_set.Var_Name = var_Name_Arr[i]
-            sample_set.Var_Metric = var_Metric_Arr[i]
-            sample_set.Var_Value = var_Value_Arr[i]
-
-            sample_set.save
-            
-            dp_id = Datapoint.last.id
-            @dp_id_list.push(dp_id)
-
-          else
-            @dp_err_arr.push(var_Name_Arr[i])
-            puts @dp_err_arr
-          end
+        else
+          @dp_err_arr[0] = "Date Taken does not fall within Run Schedule"
         end
+      else
+        flash[:notice] = "ERROR: Date must be entered as MM/DD/YYYY"
+        render "add_sample_set"
       end
-
-      begin
-        @dp_added = Datapoint.where(id: @dp_id_list)
-      rescue ActiveRecord::RecordInvalid => @invalid
-      end
-    else
-      @dp_err_arr[0] = "Date Taken does not fall within Run Schedule"
     end
   end
 
@@ -195,39 +210,47 @@ class DatapointController < ApplicationController
 
     $prot_hash_todb.each do |x,y|
       
-      exc_path = "add_tot_protein"
-      valid_date = false
-      results_array = hrs_post_start_convert(y[0],y[2],exc_path)
-      valid_date = results_array[1]
-      hrs_post_start = results_array[0]
+      valid_run = validate_run_id(y[0])
+      
+      if valid_run == true
+        exc_path = "add_tot_protein"
+        valid_date = false
+        results_array = hrs_post_start_convert(y[0],y[2],exc_path)
+        valid_date = results_array[1]
+        hrs_post_start = results_array[0]
 
-      if valid_date
-        begin
-          @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], "Total Protein", y[2].to_datetime).last
-        rescue ActiveRecord::RecordNotFound
+        if valid_date
+          begin
+            @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], "Total Protein", y[2].to_datetime).last
+          rescue ActiveRecord::RecordNotFound
+          end
+
+          if @curr_data.nil?
+            new_data = Datapoint.new()
+            new_data.Run_ID = y[0]
+            new_data.Var_Name = "Total Protein"
+            new_data.Var_Metric = "mg/mL"
+            new_data.Var_Value = y[1].to_f
+            new_data.Submitter = submitter
+            new_data.Time_Taken = y[2].to_datetime
+            new_data.Hrs_Post_Start = hrs_post_start
+            new_data.save
+
+            dp_id = Datapoint.last.id
+            dp_id_list.push(dp_id)
+          else
+            y[3] = "data already present for timepoint"
+            @bad_data[x] = y
+          end
         end
-
-        if @curr_data.nil?
-          new_data = Datapoint.new()
-          new_data.Run_ID = y[0]
-          new_data.Var_Name = "Total Protein"
-          new_data.Var_Metric = "mg/mL"
-          new_data.Var_Value = y[1].to_f
-          new_data.Submitter = submitter
-          new_data.Time_Taken = y[2].to_datetime
-          new_data.Hrs_Post_Start = hrs_post_start
-          new_data.save
-
-          dp_id = Datapoint.last.id
-          dp_id_list.push(dp_id)
-        else
-          @bad_data[x] = y
-        end
+      else
+        y[3] = "invalid run"
+        @bad_data[x] = y
       end
     end
 
     begin
-      @dp_added = Datapoint.where(id: @dp_id_list)
+      @dp_added = Datapoint.where(id: dp_id_list)
     rescue ActiveRecord::RecordInvalid => @invalid
     end
 
@@ -327,36 +350,43 @@ class DatapointController < ApplicationController
     index = 0
 
     $pc_data_todb.each do |y|
-      exc_path = "add_pc_data"
-      valid_date = false
-      results_array = hrs_post_start_convert(y[0],y[1],exc_path)
-      valid_date = results_array[1]
-      hrs_post_start = results_array[0]
+      valid_run = validate_run_id(y[0])
+      puts valid_run
+      if valid_run == true
+        
+        exc_path = "add_pc_data"
+        valid_date = false
+        results_array = hrs_post_start_convert(y[0],y[1],exc_path)
+        valid_date = results_array[1]
+        hrs_post_start = results_array[0]
 
-      if valid_date
-        begin
-          @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], y[2], y[1].to_datetime).last
-        rescue ActiveRecord::RecordNotFound
+
+        if valid_date
+          begin
+            @curr_data = Datapoint.where("RUN_ID = ? and Var_Name = ? and Time_Taken = ?",y[0], y[2], y[1].to_datetime).last
+          rescue ActiveRecord::RecordNotFound
+          end
+
+          if @curr_data.nil?
+            new_data = Datapoint.new()
+            new_data.Run_ID = y[0]
+            new_data.Var_Name = y[2]
+            new_data.Var_Metric = "Percent"
+            new_data.Var_Value = y[3].to_f
+            new_data.Submitter = submitter
+            new_data.Time_Taken = y[1].to_datetime
+            new_data.Hrs_Post_Start = hrs_post_start
+            new_data.save
+
+            dp_id = Datapoint.last.id
+            dp_id_list.push(dp_id)
+          else
+            @bad_data[index] = [y[0],y[1],y[2],y[3]]
+          end
         end
-
-        if @curr_data.nil?
-          new_data = Datapoint.new()
-          new_data.Run_ID = y[0]
-          new_data.Var_Name = y[2]
-          new_data.Var_Metric = "Percent"
-          new_data.Var_Value = y[3].to_f
-          new_data.Submitter = submitter
-          new_data.Time_Taken = y[1].to_datetime
-          new_data.Hrs_Post_Start = hrs_post_start
-          new_data.save
-
-          dp_id = Datapoint.last.id
-          dp_id_list.push(dp_id)
-        else
-          @bad_data[index] = [y[0],y[1],y[2],y[3]]
-        end
+      else
+        @bad_data[index] = [y[0],y[1],y[2],y[3]]
       end
-
       index += 1
     end
 
@@ -385,6 +415,8 @@ class DatapointController < ApplicationController
     if datestring.length > 8
       hour = datestring[8..9].to_i
       minute = datestring[10..11].to_i
+      puts hour
+      puts minute
       new_date = DateTime.new(year,month,day,hour,minute)
     else
       new_date = DateTime.new(year,month,day)
@@ -422,17 +454,40 @@ class DatapointController < ApplicationController
   end
 
   def datetime_convert(date,time)
-    date_array = date.split("/")
-    date_array.map!(&:to_i)
     
-    if time.nil? or time == ""
-      time = 0
-    end
-    
-    date_array.push(time)
+    valid_datetype = date.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
 
-    new_date = DateTime.new(date_array[2],date_array[0],date_array[1],date_array[3])
-    return new_date
+    if valid_datetype
+      date_array = date.split("/")
+      date_array.map!(&:to_i)
+      
+      if time.nil? or time == ""
+        time = 0
+      else
+        time = time.to_i
+      end
+      
+      date_array.push(time)
+
+      new_date = DateTime.new(date_array[2],date_array[0],date_array[1],date_array[3])
+      return new_date
+    else
+      return false
+    end
+  end
+
+  def validate_run_id(run_id)
+    run_found = false
+
+    begin
+      run_obj = Run.find(run_id)
+      if run_obj
+        run_found = true
+      end
+    rescue ActiveRecord::RecordNotFound
+    end
+
+    return run_found
   end
 
 end

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'schedule' => 'run#schedule'
   post 'update_run' => 'run#update_run'
   patch 'update_run' => 'run#confirm_run_update'
+  get 'update_run' => 'run#update_run'
   get 'search' => 'run#search'
   post 'search' => 'run#search_results'
   post 'data_results' => 'datapoint#results'

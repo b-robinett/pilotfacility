@@ -19,13 +19,15 @@
 	      <th>Run ID</th>
 	  	  <th>Protein mg/mL</th>
 	      <th>Date Taken</th>
+        <th>Reason not added</th>
 	    </tr>
 	    <% @bad_data.each do |x,y|  %>       
 	      <tr>
 	        <td><%= x %></td>  
 	        <td><%= y[0] %></td>  
 	        <td><%= y[1] %></td> 
-	        <td><%= y[2] %></td> 
+	        <td><%= y[2] %></td>
+          <td><%= y[3] %></td>
 	      </tr>
 	    <% end %>                        
 	   </table>  

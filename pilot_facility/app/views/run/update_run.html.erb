@@ -8,6 +8,11 @@
 
 <div class = "center"><h1>Update a Run</h1></div>
 
+<% if flash[:notice] %>
+  <div class="notice"><%= flash[:notice] %></div>
+  <% flash.clear %>
+<% end %>
+
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <body>
@@ -17,8 +22,8 @@
         
         <p><b>Start Day Fields</b></p>
 
-        <p><%= f.label :Actual_start_date, "Start Date" %>
-        <%= f.date_field :Actual_start_date, class: 'form-control' %></p>
+        <p><%= f.label :Actual_start_date, "Start Date (MM/DD/YYYY format for entry)" %>
+        <%= f.text_field :Actual_start_date, class: 'form-control' %></p>
 
         <p><%= f.label :Reactor_ID, "Reactor ID" %>
         <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 45 %></p>
@@ -37,8 +42,8 @@
 
         <p><b>End Day Fields</b></p>
 
-        <p><%= f.label :Actual_end_date, "End Date" %>
-        <%= f.date_field :Actual_end_date, class: 'form-control' %></p>
+        <p><%= f.label :Actual_end_date, "End Date (MM/DD/YYYY format for entry)" %>
+        <%= f.text_field :Actual_end_date, class: 'form-control' %></p>
 
         <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
         <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10, :value => @target[:Day_Harvested] %></p>
