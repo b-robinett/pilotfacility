@@ -8,6 +8,11 @@
 
 <div class = "center"><h1>Compare Runs</h1></div>
 
+<% if flash[:notice] %>
+  <div class="notice" align="center"><font color = "ff0000"><b><h2><%= flash[:notice] %></h2></b></font></div>
+  <% flash.clear %>
+<% end %>
+
 <div class="row">
   <div class="col-md-6 col-md-offset-5">
     <%= form_tag '/comparison_report' do %>
@@ -16,7 +21,7 @@
     <% end %>
     <p></p>
     <%= form_tag '/run_lineage' do %>
-      <b>Trace lineage by Run ID: </b><%= number_field_tag 'run_lin_val', in: 1...400 %>
+      <b>Trace lineage by Run ID: </b><%= number_field_tag 'run_lin_val' %>
       <%= submit_tag 'Submit' %>
     <% end %>
   </div>

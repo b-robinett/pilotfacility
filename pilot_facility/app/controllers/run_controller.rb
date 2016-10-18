@@ -136,7 +136,11 @@ class RunController < ApplicationController
       render :dashboard
     end
 
-    @start_date = @target[:Actual_start_date].strftime("%m/%d/%Y")
+    if @target[:Actual_start_date]
+      @start_date = @target[:Actual_start_date].strftime("%m/%d/%Y")
+    else
+      @start_date = ""
+    end
     
     if @target[:Actual_end_date]
       @end_date = @target[:Actual_end_date].strftime("%m/%d/%Y")
@@ -171,8 +175,8 @@ class RunController < ApplicationController
                           :Temperature => params[:run][:Temperature],
                           :Organism => params[:run][:Organism],
                           :Strain_ID => params[:run][:Strain_ID],
-                          :Actual_start_date => params[:run][:Actual_start_date],
-                          :Actual_end_date => params[:run][:Actual_end_date],
+                          :Actual_start_date => actual_start_date,
+                          :Actual_end_date => actual_end_date,
                           :Reactor_ID => params[:run][:Reactor_ID],
                           :Reactor_Pos => params[:run][:Reactor_Pos],
                           :Day_Harvested => params[:run][:Day_Harvested],
@@ -311,31 +315,39 @@ class RunController < ApplicationController
 
   def run_lineage
     @input_val = params[:run_lin_val]
-    @run_array = []
-    @run_array.push(@input_val)
-    
-    parent_run_id = 0
-    run_to_search = @input_val
 
-    for i in 1..100
-      rec_holder = Run.find(run_to_search)
-      if rec_holder.Parent_Run != nil
-        parent_run_id = rec_holder.Parent_Run
-        par_holder = Run.find(parent_run_id)
-        if par_holder.Reactor_ID != nil
-          run_to_search = parent_run_id
-          @run_array.push(parent_run_id)
+    begin
+      @input_run = Run.find(@input_val)
+    rescue ActiveRecord::RecordNotFound
+      flash[:notice] = "No run with id: " + @input_val.to_s
+      render 'comparison_setup'
+    else
+      @run_array = []
+      @run_array.push(@input_val)
+    
+      parent_run_id = 0
+      run_to_search = @input_val
+
+      for i in 1..100
+        rec_holder = Run.find(run_to_search)
+        if rec_holder.Parent_Run != nil
+          parent_run_id = rec_holder.Parent_Run
+          par_holder = Run.find(parent_run_id)
+          if par_holder.Reactor_ID != nil
+            run_to_search = parent_run_id
+            @run_array.push(parent_run_id)
+          else
+            break
+          end
         else
           break
         end
-      else
-        break
       end
+
+      compile_data(@run_array)
+
+      render "comparison_report"
     end
-
-    compile_data(@run_array)
-
-    render "comparison_report"
   end
 
   def build_hash(runarray,target,var_name)
