@@ -9,7 +9,7 @@
 <div class = "center"><h1>Update a Run</h1></div>
 
 <% if flash[:notice] %>
-  <div class="notice"><%= flash[:notice] %></div>
+  <div class="notice" align="center"><font color = "ff0000"><b><h2><%= flash[:notice] %></h2></b></font></div>
   <% flash.clear %>
 <% end %>
 
@@ -23,7 +23,7 @@
         <p><b>Start Day Fields</b></p>
 
         <p><%= f.label :Actual_start_date, "Start Date (MM/DD/YYYY format for entry)" %>
-        <%= f.text_field :Actual_start_date, class: 'form-control' %></p>
+        <%= f.text_field :Actual_start_date, class: 'form-control', :value => @start_date %></p>
 
         <p><%= f.label :Reactor_ID, "Reactor ID" %>
         <%= f.number_field :Reactor_ID, class: 'form-control', :value => @target[:Reactor_ID], :max => 45 %></p>
@@ -43,7 +43,7 @@
         <p><b>End Day Fields</b></p>
 
         <p><%= f.label :Actual_end_date, "End Date (MM/DD/YYYY format for entry)" %>
-        <%= f.text_field :Actual_end_date, class: 'form-control' %></p>
+        <%= f.text_field :Actual_end_date, class: 'form-control', :value => @end_date %></p>
 
         <p><%= f.label :Day_Harvested, "When to harvest (days after start)" %>
         <%= f.number_field :Day_Harvested, class: 'form-control', :in => 1..10, :value => @target[:Day_Harvested] %></p>
@@ -54,7 +54,7 @@
         <%= f.text_field :Scientist, class: 'form-control', :value => @target[:Scientist] %></p>
         
         <p><%= f.label :Organism, "Select target organism" %>
-        <%= f.select :Organism, options_for_select(['Aponinum','Arthrospira - NIES39', 'Arthrospira - UTex','Synechococcus 7942'], @target[:Organism])%></p>
+        <%= f.select :Organism, options_for_select(['Aponinum','Arthrospira - NIES39', 'Arthrospira - Utex','Synechococcus 7942'], @target[:Organism])%></p>
         
         <p><%= f.label :Strain_ID, "Strain ID" %>
         <%= f.text_field :Strain_ID, class: 'form-control', :value => @target[:Strain_ID] %></p>

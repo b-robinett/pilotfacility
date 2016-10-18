@@ -122,7 +122,27 @@ class RunController < ApplicationController
   end
   
   def update_run
-    @target = Run.find(params[:run_id_val])
+    begin
+      @target = Run.find(params[:run_id_val])
+    rescue ActiveRecord::RecordNotFound
+      flash[:notice] = "No run with id: " + params[:run_id_val].to_s
+      @current = Run.where("Actual_end_date >= ? or Actual_end_date IS NULL", Date.today).where("Actual_start_date <= ?", Date.today)
+      @master_dict = Hash.new
+      @current.each do |p|
+        create_dict(p,@master_dict)
+      end
+      final_run = Run.last
+      @final_run_id = final_run.id
+      render :dashboard
+    end
+
+    @start_date = @target[:Actual_start_date].strftime("%m/%d/%Y")
+    
+    if @target[:Actual_end_date]
+      @end_date = @target[:Actual_end_date].strftime("%m/%d/%Y")
+    else
+      @end_date = ""
+    end
   end
   
   def confirm_run_update

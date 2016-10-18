@@ -8,6 +8,11 @@
 
 <div class = "center" align="center"><h1>Matrix Genetics Pilot Facility Dashboard</h1></div>
 
+<% if flash[:notice] %>
+  <div class="notice" align="center"><font color = "ff0000"><b><h2><%= flash[:notice] %></h2></b></font></div>
+  <% flash.clear %>
+<% end %>
+<p></p>
 <div align="center"> 
   <table border="0"> 
     <tr>

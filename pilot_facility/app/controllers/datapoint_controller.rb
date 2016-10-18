@@ -139,6 +139,7 @@ class DatapointController < ApplicationController
     @filecontent = params[:tp_data_file].read
     @data_arr = @filecontent.split(' ')
     @data_arr = @data_arr[33..128]
+    
 
     @plate_data = Array.new()
     temp_arr = Array.new()

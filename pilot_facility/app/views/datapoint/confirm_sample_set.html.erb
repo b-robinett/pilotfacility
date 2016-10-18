@@ -6,7 +6,7 @@
 </div>
 <p></p>
 <div align="center">
-  <p><b><%= "ERROR: Invalid Run ID" if @valid_run == false %></b></p>
+  <p><b><h2><font color = "ff0000"><%= "ERROR: Invalid Run ID" if @valid_run == false %></font></h2></b></p>
 
   <% unless @valid_run == false%>
     <p><b><%= "ERRORS" if @dp_err_arr[0] %></b></p>

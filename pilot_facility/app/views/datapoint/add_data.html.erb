@@ -9,7 +9,7 @@
 <div class = "center"><h1>Add a Datapoint</h1></div>
 
 <% if flash[:notice] %>
-  <div class="notice"><%= flash[:notice] %></div>
+  <div class="notice" align="center"><font color = "ff0000"><b><h2><%= flash[:notice] %></h2></b></font></div>
   <% flash.clear %>
 <% end %>
 
@@ -24,7 +24,7 @@
         <p><%= f.label :Submitter, "Submitter" %>
         <%= f.text_field :Submitter, class: 'form-control', :required => true %></p>
         
-        <p><%= f.label :Time_Taken, "Date Data Collected" %>
+        <p><%= f.label :Time_Taken, "Date Data Collected (MM/DD/YYYY)" %>
         <%= f.text_field :Time_Taken, class: 'form-control', :required => true %></p>
 
         <p>Time Taken (Hour of Day, eg. 13 for 1pm): <%= number_field_tag 'Hour_Taken', nil, :step => 0.5%></p>
